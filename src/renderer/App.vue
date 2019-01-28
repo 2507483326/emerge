@@ -1,15 +1,13 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+	<router-view></router-view>
 </template>
 
 <script>
-  export default {
-    name: 'emerge'
-  }
+	export default {
+		name: 'emerge'
+	}
 </script>
 
-<style>
-  /* CSS */
+<style lang="stylus">
+	/* CSS */
 </style>
