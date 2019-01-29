@@ -1,46 +1,34 @@
 <template>
-	<div>
-		<table-menu :model="treeData"></table-menu>
-	</div>
+	<section class="container">
+		<base-header></base-header>
+		<table-menu :model="item" :key="item.name" v-for="item in menuList"></table-menu>
+	</section>
 </template>
 
 <script>
 	import tableMenu from '@/components/tableMenu'
-
+	import baseHeader from '@/components/baseHeader'
+	import { Menu } from '@/model'
 	export default {
 		data () {
 			return {
-				treeData: {
-					name: 'My Tree',
-					children: [
-						{name: 'hello'},
-						{name: 'wat'},
-						{
-							name: 'child folder',
-							children: [
-								{
-									name: 'child folder',
-									children: [
-										{name: 'hello'},
-										{name: 'wat'}
-									]
-								},
-								{name: 'hello'},
-								{name: 'wat'},
-								{
-									name: 'child folder',
-									children: [
-										{name: 'hello'},
-										{name: 'wat'}
-									]
-								}
-							]
-						}
-					]
-				}
+				menuList: []
+			}
+		},
+		mounted () {
+			this.addDbLibrary()
+		},
+		methods: {
+			addDbLibrary () {
+				this.menuList.push(new Menu({
+					id: 0,
+					name: 'test1',
+					isDbLibrary: true
+				}))
 			}
 		},
 		components: {
+			baseHeader,
 			tableMenu
 		}
 	}

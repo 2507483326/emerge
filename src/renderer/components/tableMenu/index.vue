@@ -1,21 +1,20 @@
 <template>
-	<div>
+	<div class="table_menu_box">
 		<div
-			:class="{bold: isFolder}"
+			class="title_box"
 			@click="toggle"
 			@dblclick="changeType">
-			{{ model.name }}
-			<span v-if="isFolder">[{{ open ? '-' : '+' }}]</span>
+			<div class="iconfont" :class="getIconClass"></div>
+			<div class="name">{{ model.name }}</div>
 		</div>
-		<ul v-show="open" v-if="isFolder">
+		<div class="child_box" v-show="open" v-if="isFolder">
 			<table-menu
 				class="item"
 				v-for="(model, index) in model.children"
 				:key="index"
 				:model="model">
 			</table-menu>
-			<li class="add" @click="addChild">+</li>
-		</ul>
+		</div>
 	</div>
 </template>
 
@@ -25,7 +24,7 @@
 		props: {
 			model: Object
 		},
-		data: function () {
+		data () {
 			return {
 				open: false
 			}
@@ -34,6 +33,9 @@
 			isFolder: function () {
 				return this.model.children &&
 					this.model.children.length
+			},
+			getIconClass () {
+				return this.isFolder ? 'icon-shujuku' : 'icon-biao'
 			}
 		},
 		methods: {
@@ -48,16 +50,22 @@
 					this.addChild()
 					this.open = true
 				}
-			},
-			addChild: function () {
-				this.model.children.push({
-					name: 'new stuff'
-				})
 			}
 		}
 	}
 </script>
 
 <style lang="stylus" scoped>
-	/* CSS */
+	.table_menu_box
+		.title_box
+			display flex
+			align-items center
+			justify-content flex-start
+			cursor pointer
+			user-select none
+			height 20px
+			.name
+				padding-left 5px
+		.child_box
+			padding 5px 0 0 20px
 </style>

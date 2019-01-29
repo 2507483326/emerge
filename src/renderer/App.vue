@@ -8,6 +8,22 @@
 	}
 </script>
 
+<style lang="less">
+	@import (less) "~heyui/themes/var.less";
+	@import (less) "~heyui/themes/common.less";
+</style>
+
 <style lang="stylus">
 	/* CSS */
+	*
+		padding 0
+		margin 0
+	html,body
+		height 100%
+	body
+		background #f3f6f8
+	.container
+		height 100%
+		display flex
+		flex-direction column
 </style>
