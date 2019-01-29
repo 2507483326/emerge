@@ -13,15 +13,19 @@ export function exec (cmdId, cmdData) {
 		let execPath = `java -jar static/jar/qing-dbcovert-1.00-jar-with-dependencies.jar ${cmdId} ${objBase64}`
 		childExec(execPath, (error, stdout) => {
 			if (error) {
-				reject(error)
+				reject({
+					flag: false,
+					msg: error
+				})
 				return
 			}
 			let execResult = stdout
-			console.log('===================')
-			console.log(execResult)
-			console.log('===================')
 			let resultObj = JSON.parse(execResult)
-			resolve(resultObj)
+			if (resultObj.flag) {
+				resolve(resultObj.data)
+			} else {
+				reject(resultObj)
+			}
 		})
 	})
 }

@@ -29,7 +29,8 @@ module.exports = {
 		'no-tabs': 'off',
 		'quotes': 'off',
 		'padded-blocks': 0,
-		'indent': 'off'
+		'indent': 'off',
+		'prefer-promise-reject-errors': 'off'
 	},
 	globals: {
 		App: true,
