@@ -1,9 +1,12 @@
 <template>
 	<section class="container">
+		<!--头部-->
 		<base-header></base-header>
+		<!--左侧菜单-->
 		<section ref="tableMenuBox">
 			<table-menu :model="item" :key="item.name" @showContextMenu="showContextMenu" v-for="item in dbList"></table-menu>
 		</section>
+		<!--右键菜单-->
 		<context-menu ref="contextMenu"
 					  @update:show="(show) => isRightMenuShow = show"
 					  :show="isRightMenuShow" class="right_menu">
