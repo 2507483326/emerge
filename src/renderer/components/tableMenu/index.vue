@@ -8,7 +8,7 @@
 			<div class="iconfont" :class="getIconClass"></div>
 			<div class="name">{{ model.name }}</div>
 		</div>
-		<div class="child_box" v-show="open" v-if="isFolder">
+		<div class="child_box" v-show="open" v-if="isHasChildren">
 			<table-menu
 				class="item"
 				v-for="(model, index) in model.children"
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+	import { jarTool } from '@/tools'
+	import { cmd } from '@/common'
 	export default {
 		name: 'table-menu',
 		props: {
@@ -31,18 +33,29 @@
 			}
 		},
 		computed: {
-			isFolder: function () {
+			isHasChildren: function () {
 				return this.model.children &&
 					this.model.children.length
 			},
 			getIconClass () {
-				return this.isFolder ? 'icon-shujuku' : 'icon-biao'
+				return this.isHasChildren ? 'icon-shujuku' : 'icon-biao'
 			}
 		},
 		methods: {
-			changeType () {
-				if (!this.isFolder) {
-					this.open = !this.open
+			async changeType () {
+				try {
+					if (this.model.isDbLibrary && !this.isHasChildren) {
+						console.log('请求下面所有的表')
+						console.log(this.model.connectConfig)
+						let result = await jarTool.exec(cmd.GET_DB_INFO, this.model.connectConfig)
+						console.log(result)
+					}
+					if (!this.isHasChildren) {
+						this.open = !this.open
+					}
+				} catch (e) {
+					console.error(e)
+					this.$Message['error']('获取数据库信息失败')
 				}
 			},
 			showContextMenu ($event) {

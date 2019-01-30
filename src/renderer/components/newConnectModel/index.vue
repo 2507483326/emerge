@@ -84,10 +84,12 @@
 					this.loading = true
 					this.addAllTip()
 					this.sqlConnect.groupMysqlUrl()
+					console.log(this.sqlConnect)
 					await jarTool.exec(cmd.TEST_DB_CONNECT, this.sqlConnect)
 					this.$Message['success']('数据库连接成功')
 				} catch (e) {
 					this.$Message['error']('数据库连接失败')
+					console.error(e)
 				} finally {
 					this.loading = false
 				}
@@ -125,12 +127,9 @@
 					this.sqlConnectTip[name].shift()
 				}
 				this.sqlConnectTip[name].push({
-					key: JSON.stringify(title),
+					key: title,
 					title: title
 				})
-			},
-			resetSqlConnect () {
-				this.sqlConnect = new SqlConnect()
 			}
 		}
 	}
