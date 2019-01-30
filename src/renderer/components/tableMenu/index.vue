@@ -2,8 +2,9 @@
 	<div class="table_menu_box">
 		<div
 			class="title_box"
-			@click="toggle"
-			@dblclick="changeType">
+			tabindex="0"
+			@dblclick="changeType"
+			@contextmenu="showContextMenu">
 			<div class="iconfont" :class="getIconClass"></div>
 			<div class="name">{{ model.name }}</div>
 		</div>
@@ -39,17 +40,13 @@
 			}
 		},
 		methods: {
-			toggle: function () {
-				if (this.isFolder) {
+			changeType () {
+				if (!this.isFolder) {
 					this.open = !this.open
 				}
 			},
-			changeType: function () {
-				if (!this.isFolder) {
-					this.$set(this.model, 'children', [])
-					this.addChild()
-					this.open = true
-				}
+			showContextMenu ($event) {
+				this.$emit('showContextMenu', $event, this.model)
 			}
 		}
 	}
@@ -64,6 +61,9 @@
 			cursor pointer
 			user-select none
 			height 20px
+			&:focus
+				background #eee
+				outline none
 			.name
 				padding-left 5px
 		.child_box

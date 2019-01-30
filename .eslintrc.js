@@ -4,7 +4,11 @@ module.exports = {
 	root: true,
 	parser: 'babel-eslint',
 	parserOptions: {
-		sourceType: 'module'
+		sourceType: 'module',
+		allowImportExportEverywhere: false,
+		ecmaFeatures: {
+			legacyDecorators: true
+		}
 	},
 	env: {
 		browser: false,
@@ -30,7 +34,9 @@ module.exports = {
 		'quotes': 'off',
 		'padded-blocks': 0,
 		'indent': 'off',
-		'prefer-promise-reject-errors': 'off'
+		'prefer-promise-reject-errors': 'off',
+		'vue/parsing-error': 'off',
+		'vue/no-parsing-error': 'off'
 	},
 	globals: {
 		App: true,

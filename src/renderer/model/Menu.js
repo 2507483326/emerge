@@ -5,13 +5,15 @@ export default class Menu {
 		children = [],
 		name = "",
 		isDbLibrary = false,
-		isConnect = false
+		isConnect = false,
+		connectConfig = null
 	}) {
 		this.id = id
 		this.children = children
 		this.name = name
 		this.isDbLibrary = isDbLibrary
 		this.isConnect = isConnect
+		this.connectConfig = connectConfig
 	}
 
 }

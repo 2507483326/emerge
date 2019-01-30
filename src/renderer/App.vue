@@ -4,7 +4,15 @@
 
 <script>
 	export default {
-		name: 'emerge'
+		name: 'emerge',
+		mounted () {
+			this.init()
+		},
+		methods: {
+			init () {
+				this.$store.dispatch('initDb')
+			}
+		}
 	}
 </script>
 

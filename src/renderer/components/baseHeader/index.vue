@@ -8,15 +8,13 @@
 		</div>
 		<!--弹窗-->
 		<section class="modal_box">
-			<new-connect-model ref="newConnectModel" @testConnect="testConnect" @addDbLibrary="addDbLibrary"></new-connect-model>
+			<new-connect-model ref="newConnectModel" @addDbLibrary="addDbLibrary"></new-connect-model>
 		</section>
 	</section>
 </template>
 
 <script>
 	import newConnectModel from '@/components/newConnectModel'
-	import { jarTool } from '@/tools'
-	import { cmd } from '@/common'
 	export default {
 		data () {
 			return {
@@ -25,14 +23,6 @@
 		methods: {
 			open () {
 				this.$refs.newConnectModel.show()
-			},
-			testConnect (sqlConnect) {
-				jarTool.exec(cmd.TEST_DB_CONNECT, sqlConnect).then(re => {
-					console.log(re)
-				}).catch(err => {
-					console.error(err)
-					this.$Message['error']('数据库连接失败')
-				})
 			},
 			addDbLibrary (sqlConnect) {
 				console.log(sqlConnect)

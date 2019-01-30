@@ -1,39 +1,63 @@
 <template>
 	<section class="container">
 		<base-header></base-header>
-		<table-menu :model="item" :key="item.name" v-for="item in menuList"></table-menu>
+		<section ref="tableMenuBox">
+			<table-menu :model="item" :key="item.name" @showContextMenu="showContextMenu" v-for="item in dbList"></table-menu>
+		</section>
+		<context-menu ref="contextMenu"
+					  @update:show="(show) => isRightMenuShow = show"
+					  :show="isRightMenuShow" class="right_menu">
+			<div @click="test">test</div>
+			<div>test</div>
+			<div>test</div>
+		</context-menu>
 	</section>
 </template>
 
 <script>
 	import tableMenu from '@/components/tableMenu'
+	import contextMenu from '@/components/contextMenu'
 	import baseHeader from '@/components/baseHeader'
-	import { Menu } from '@/model'
+	import { mapState } from 'vuex'
 	export default {
 		data () {
 			return {
-				menuList: []
+				isRightMenuShow: false,
+				selectModel: null
 			}
 		},
+		computed: {
+			...mapState({
+				dbList: state => state.db.dbList
+			})
+		},
 		mounted () {
-			this.addDbLibrary()
 		},
 		methods: {
-			addDbLibrary () {
-				this.menuList.push(new Menu({
-					id: 0,
-					name: 'test1',
-					isDbLibrary: true
-				}))
+			test ($event) {
+				console.log($event)
+			},
+			showContextMenu ($event, model) {
+				this.selectModel = model
+				this.$refs.contextMenu.contextMenuHandler($event)
+				this.isRightMenuShow = true
 			}
 		},
 		components: {
 			baseHeader,
-			tableMenu
+			tableMenu,
+			contextMenu
 		}
 	}
 </script>
 
 <style lang="stylus" scoped>
 	/* CSS */
+	.right_menu
+		position fixed
+		background #fff
+		border solid 1px rgba(0, 0, 0, .2)
+		border-radius 3px
+		z-index 999
+		display none
 </style>
