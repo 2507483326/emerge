@@ -29,10 +29,14 @@ const actions = {
 		fs.writeJsonSync('./userData/default.json', state)
 	},
 	initDb ({ state, commit }) {
-		fs.ensureFileSync('./userData/default.json')
-		let oldData = fs.readJsonSync('./userData/default.json')
-		if (oldData && oldData.dbList) {
-			commit('SET_DB_LIST', oldData.dbList)
+		try {
+			fs.ensureFileSync('./userData/default.json')
+			let oldData = fs.readJsonSync('./userData/default.json')
+			if (oldData && oldData.dbList) {
+				commit('SET_DB_LIST', oldData.dbList)
+			}
+		} catch (e) {
+			console.log('default.json解析失败')
 		}
 	}
 }
