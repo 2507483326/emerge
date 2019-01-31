@@ -12,6 +12,7 @@ const getters = {
 				tableVo.tableList.forEach(tableItem => {
 					item.children.push(new Menu({
 						id: UUID.create().toString(),
+						dbId: dbId,
 						name: tableItem.tableName
 					}))
 				})
@@ -19,6 +20,16 @@ const getters = {
 			return item
 		})
 		return menuList
+	},
+	tableDetail: state => data => {
+		let tableVo = state.db.tableList.find(item => {
+			return item.id === data.dbId
+		})
+		console.log(data.tableName)
+		let tableDetail = tableVo.tableList.find(item => {
+			return item.tableName === data.tableName
+		})
+		return tableDetail
 	}
 }
 export default getters

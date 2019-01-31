@@ -42,6 +42,10 @@
 		},
 		methods: {
 			async changeType () {
+				if (!this.model.isDbLibrary) {
+					this.$bus.emit('selectTable', {dbId: this.model.dbId, tableName: this.model.name})
+					return
+				}
 				if (!this.isHasChildren && !this.model.isConnect) {
 					await this.connectDb()
 				}
@@ -55,6 +59,9 @@
 				this.$emit('showContextMenu', $event, this.model)
 			},
 			async refreshDb (id) {
+				if (!this.model.isDbLibrary) {
+					return
+				}
 				if (id === this.model.id) {
 					await this.connectDb()
 				}

@@ -67,9 +67,6 @@
 					top: this.y + 'px'
 				}
 			}
-		},
-		destroyed () {
-			this.unbindEvents()
 		}
 	}
 </script>

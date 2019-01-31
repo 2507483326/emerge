@@ -2,10 +2,21 @@
 	<section class="container">
 		<!--头部-->
 		<base-header></base-header>
-		<!--左侧菜单-->
-		<section ref="tableMenuBox">
-			<table-menu ref="tableMenu" :model="item" :key="item.name" @showContextMenu="showContextMenu" v-for="item in menuList"></table-menu>
-		</section>
+		<!--main-->
+		<div class="main_box">
+			<!--左侧菜单-->
+			<section ref="tableMenuBox" class="table_menu_box">
+				<table-menu ref="tableMenu" :model="item" :key="item.name"
+							@showContextMenu="showContextMenu" v-for="item in menuList"></table-menu>
+			</section>
+			<!--右侧详细-->
+			<section class="table_detail_box">
+				<Table :datas="columnVoList" :columns="columns">
+					<div slot="empty">自定义提醒：暂时无数据</div>
+				</Table>
+			</section>
+		</div>
+
 		<!--右键菜单-->
 		<context-menu ref="contextMenu"
 					  @update:show="(show) => isRightMenuShow = show"
@@ -25,7 +36,16 @@
 		data () {
 			return {
 				isRightMenuShow: false,
-				selectModel: null
+				menuSelectModel: null,
+				columns: [
+					{ title: '列名', prop: 'columnName' },
+					{ title: '类型', prop: 'typeName' },
+					{ title: '长度', prop: 'columnSize' },
+					{ title: '不是null', prop: 'nullAble' },
+					{ title: '主键', prop: 'id' },
+					{ title: '注释', prop: 'remarks' }
+				],
+				columnVoList: []
 			}
 		},
 		computed: {
@@ -33,23 +53,32 @@
 				menuList: 'menuList'
 			})
 		},
-		mounted () {
+		created () {
+			this.$bus.on('selectTable', this.selectTable)
+		},
+		beforeDestroy () {
+			this.$bus.off('selectTable', this.selectTable)
 		},
 		methods: {
 			refresh () {
 				this.$refs.tableMenu.forEach(item => {
-					item.refreshDb(this.selectModel.id)
+					item.refreshDb(this.menuSelectModel.id)
 				})
 				this.isRightMenuShow = false
 			},
-			close ($event) {
-				this.$store.dispatch('closeConnect', this.selectModel.id)
+			close () {
+				this.$store.dispatch('closeConnect', this.menuSelectModel.id)
 				this.isRightMenuShow = false
 			},
 			showContextMenu ($event, model) {
-				this.selectModel = model
+				this.menuSelectModel = model
 				this.$refs.contextMenu.contextMenuHandler($event)
 				this.isRightMenuShow = true
+			},
+			selectTable (data) {
+				let tableVo = this.$store.getters.tableDetail(data)
+				console.log(tableVo)
+				this.columnVoList = tableVo.columnVoList
 			}
 		},
 		components: {
@@ -62,6 +91,23 @@
 
 <style lang="stylus" scoped>
 	/* CSS */
+	.main_box
+		display flex
+		margin-top 10px
+		flex 1
+		.table_menu_box
+			width 200px
+			overflow-y auto
+			overflow-x hidden
+			box-sizing border-box
+			padding 10px
+			background #fff
+		.table_detail_box
+			flex 1
+			background #fff
+			margin-left 10px
+			box-sizing border-box
+			padding 10px
 	.right_menu
 		position fixed
 		background #fff
