@@ -1,5 +1,5 @@
-let childExec = require('child_process').exec
-
+import iconv from 'iconv-lite'
+import { exec as childExec } from 'child_process'
 /**
  * 执行jar包
  * @param cmdId 请求命令
@@ -11,20 +11,24 @@ export function exec (cmdId, cmdData) {
 		let objBuffer = Buffer.from(JSON.stringify(cmdData))
 		let objBase64 = objBuffer.toString('base64')
 		let execPath = `java -jar static/jar/qing-dbcovert-1.00-jar-with-dependencies.jar ${cmdId} ${objBase64}`
-		childExec(execPath, (error, stdout) => {
-			if (error) {
-				reject({
-					flag: false,
-					msg: error
-				})
-				return
-			}
-			let execResult = stdout
-			let resultObj = JSON.parse(execResult)
-			if (resultObj.flag) {
-				resolve(resultObj.data)
-			} else {
-				reject(resultObj)
+		childExec(execPath, { encoding: 'buffer' }, (error, stdout) => {
+			try {
+				if (error) {
+					reject({
+						flag: false,
+						msg: error
+					})
+					return
+				}
+				let execResult = iconv.decode(stdout, 'cp936')
+				let resultObj = JSON.parse(execResult)
+				if (resultObj.flag) {
+					resolve(resultObj.data)
+				} else {
+					reject(resultObj)
+				}
+			} catch (e) {
+				reject(e)
 			}
 		})
 	})

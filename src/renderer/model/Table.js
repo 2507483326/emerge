@@ -18,6 +18,10 @@ export default class Table {
 			this.primaryKeyList.push(new PrimaryKey(item))
 		})
 		data.columnVoList.forEach(item => {
+			let isPrimaryKey = data.primaryKeyList.some(primaryKeyItem => {
+				return primaryKeyItem.columnName === item.columnName
+			})
+			item.isPrimaryKey = isPrimaryKey
 			this.columnVoList.push(new Column(item))
 		})
 	}

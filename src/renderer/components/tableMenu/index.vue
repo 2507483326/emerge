@@ -72,9 +72,11 @@
 
 <style lang="stylus" scoped>
 	.table_menu_box
+		width fit-content
 		.title_box
 			display flex
 			align-items center
+			width fit-content
 			justify-content flex-start
 			cursor pointer
 			user-select none
@@ -88,6 +90,7 @@
 				&.loading
 					animation dbLoad 1s infinite linear
 			.name
+				width fit-content
 				padding-left 5px
 		.child_box
 			padding 5px 0 0 20px

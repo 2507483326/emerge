@@ -1,4 +1,4 @@
-import { Menu, TableVo } from '@/model'
+import { Menu, TableVo, Table } from '@/model'
 import UUID from 'uuid-js'
 import fs from 'fs-extra'
 const state = {
@@ -21,6 +21,11 @@ const mutations = {
 			dbVo.isConnect = data.flag
 		}
 	},
+	DELETE_DB (state, dbId) {
+		state.dbList = state.dbList.filter(item => {
+			return item.id !== dbId
+		})
+	},
 	ADD_TABLE (state, tableList) {
 		let originTableList = state.tableList.filter(item => {
 			return item.id !== tableList.id
@@ -31,7 +36,7 @@ const mutations = {
 }
 
 const actions = {
-	addDb ({ state, commit }, sqlConnectConfig) {
+	addDb ({ getters, commit }, sqlConnectConfig) {
 		let db = new Menu({
 			id: UUID.create().toString(),
 			name: `${sqlConnectConfig.name} (${sqlConnectConfig.mysqlDB})`,
@@ -41,7 +46,7 @@ const actions = {
 		commit('ADD_DB', db)
 		// 将新的dbList存储到文件
 		fs.ensureFileSync('./userData/default.json')
-		fs.writeJsonSync('./userData/default.json', state)
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	},
 	initDb ({ state, commit }) {
 		try {
@@ -57,7 +62,7 @@ const actions = {
 	addTable ({ state, commit }, data) {
 		let tableList = []
 		data.data.dbVo.tableVoList.forEach(item => {
-			tableList.push(item)
+			tableList.push(new Table(item))
 		})
 		let tableListVo = new TableVo({
 			id: data.id,
@@ -68,6 +73,11 @@ const actions = {
 	},
 	closeConnect ({ commit }, dbId) {
 		commit('CHANGE_DB', {dbId, flag: false})
+	},
+	deleteDb ({ getters, commit }, dbId) {
+		commit('DELETE_DB', dbId)
+		fs.ensureFileSync('./userData/default.json')
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	}
 }
 

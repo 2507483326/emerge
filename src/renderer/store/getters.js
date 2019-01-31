@@ -1,8 +1,19 @@
 import UUID from "uuid-js"
 import { Menu } from '@/model'
+import clone from 'clone'
 const getters = {
+	saveJson: state => {
+		let saveObj = {}
+		let saveDbList = clone(state.db.dbList).map(item => {
+			item.isConnect = false
+			item.children = []
+			return item
+		})
+		saveObj.dbList = saveDbList
+		return saveObj
+	},
 	menuList: state => {
-		let dbList = JSON.parse(JSON.stringify(state.db.dbList))
+		let dbList = clone(state.db.dbList)
 		let menuList = dbList.map(item => {
 			let dbId = item.id
 			let tableVo = state.db.tableList.find(item => {

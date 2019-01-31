@@ -3,7 +3,7 @@ export default class Column {
 	constructor ({tableCat = "", tableSchem = "", tableName = "", dataType = null, typeName = "", columnSize = null, decimalDigits = null,
 				numPrecRadix = null, nullAble = null, remarks = "", columnDef = "", charOctetLength = null, ordinalPosition = null, isNullable = "",
 				scourceDataType = null, isAutoIncrement = "", columnName = "", lowerCaseUnderLineColumnName = "", upperCaseUnderLineColumnName = "",
-				camelColumnName = "", javaType = "", oracleType = "", mysqlType = "", sqlServerType = "", pgsqlType = ""}) {
+				camelColumnName = "", javaType = "", oracleType = "", mysqlType = "", sqlServerType = "", pgsqlType = "", isPrimaryKey = false}) {
 		this.tableCat = tableCat
 		this.tableSchem = tableSchem
 		this.tableName = tableName
@@ -29,5 +29,6 @@ export default class Column {
 		this.mysqlType = mysqlType
 		this.sqlServerType = sqlServerType
 		this.pgsqlType = pgsqlType
+		this.isPrimaryKey = isPrimaryKey
 	}
 }
