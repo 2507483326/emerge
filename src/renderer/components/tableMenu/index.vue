@@ -5,7 +5,8 @@
 			tabindex="0"
 			@dblclick="changeType"
 			@contextmenu="showContextMenu">
-			<div class="iconfont" :class="getIconClass"></div>
+			<div class="iconfont" :class="{'icon-shujuku': model.isDbLibrary && !isConnect, 'icon-jiazai': isConnect,
+			'loading': isConnect, 'connect': model.isConnect, 'icon-biao': !model.isDbLibrary}"></div>
 			<div class="name">{{ model.name }}</div>
 		</div>
 		<div class="child_box" v-show="open" v-if="isHasChildren">
@@ -20,15 +21,16 @@
 </template>
 
 <script>
-	import { jarTool } from '@/tools'
-	import { cmd } from '@/common'
+	import { db } from '@/mixins'
 	export default {
 		name: 'table-menu',
+		mixins: [db],
 		props: {
 			model: Object
 		},
 		data () {
 			return {
+				isConnect: false,
 				open: false
 			}
 		},
@@ -36,30 +38,26 @@
 			isHasChildren: function () {
 				return this.model.children &&
 					this.model.children.length
-			},
-			getIconClass () {
-				return this.isHasChildren ? 'icon-shujuku' : 'icon-biao'
 			}
 		},
 		methods: {
 			async changeType () {
-				try {
-					if (this.model.isDbLibrary && !this.isHasChildren) {
-						console.log('请求下面所有的表')
-						console.log(this.model.connectConfig)
-						let result = await jarTool.exec(cmd.GET_DB_INFO, this.model.connectConfig)
-						console.log(result)
-					}
-					if (!this.isHasChildren) {
+				if (!this.isHasChildren && !this.model.isConnect) {
+					await this.connectDb()
+				}
+				this.$nextTick(() => {
+					if (this.isHasChildren) {
 						this.open = !this.open
 					}
-				} catch (e) {
-					console.error(e)
-					this.$Message['error']('获取数据库信息失败')
-				}
+				})
 			},
 			showContextMenu ($event) {
 				this.$emit('showContextMenu', $event, this.model)
+			},
+			async refreshDb (id) {
+				if (id === this.model.id) {
+					await this.connectDb()
+				}
 			}
 		}
 	}
@@ -77,8 +75,18 @@
 			&:focus
 				background #eee
 				outline none
+			.iconfont
+				&.connect
+					color green
+				&.loading
+					animation dbLoad 1s infinite linear
 			.name
 				padding-left 5px
 		.child_box
 			padding 5px 0 0 20px
+		@keyframes dbLoad
+			0%
+				transform rotate(0)
+			100%
+				transform rotate(360deg)
 </style>

@@ -1,8 +1,9 @@
-import { Menu } from '@/model'
+import { Menu, TableVo } from '@/model'
 import UUID from 'uuid-js'
 import fs from 'fs-extra'
 const state = {
-	dbList: []
+	dbList: [],
+	tableList: []
 }
 
 const mutations = {
@@ -11,15 +12,29 @@ const mutations = {
 	},
 	SET_DB_LIST (state, dbList) {
 		state.dbList = dbList
+	},
+	CHANGE_DB (state, data) {
+		let dbVo = state.dbList.find(item => {
+			return item.id === data.dbId
+		})
+		if (dbVo) {
+			dbVo.isConnect = data.flag
+		}
+	},
+	ADD_TABLE (state, tableList) {
+		let originTableList = state.tableList.filter(item => {
+			return item.id !== tableList.id
+		})
+		originTableList.push(tableList)
+		state.tableList = originTableList
 	}
 }
 
 const actions = {
 	addDb ({ state, commit }, sqlConnectConfig) {
-		console.log('新增db')
 		let db = new Menu({
 			id: UUID.create().toString(),
-			name: sqlConnectConfig.name,
+			name: `${sqlConnectConfig.name} (${sqlConnectConfig.mysqlDB})`,
 			isDbLibrary: true,
 			connectConfig: sqlConnectConfig
 		})
@@ -36,8 +51,23 @@ const actions = {
 				commit('SET_DB_LIST', oldData.dbList)
 			}
 		} catch (e) {
-			console.log('default.json解析失败')
+			console.warn('default.json解析失败')
 		}
+	},
+	addTable ({ state, commit }, data) {
+		let tableList = []
+		data.data.dbVo.tableVoList.forEach(item => {
+			tableList.push(item)
+		})
+		let tableListVo = new TableVo({
+			id: data.id,
+			tableList: tableList
+		})
+		commit('ADD_TABLE', tableListVo)
+		commit('CHANGE_DB', {dbId: data.id, flag: true})
+	},
+	closeConnect ({ commit }, dbId) {
+		commit('CHANGE_DB', {dbId, flag: false})
 	}
 }
 

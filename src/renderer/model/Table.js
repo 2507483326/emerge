@@ -1,3 +1,6 @@
+import PrimaryKey from "./PrimaryKey"
+import Column from "./Column"
+
 export default class Table {
 	tableName = ""
 	tableType = ""
@@ -11,5 +14,11 @@ export default class Table {
 		this.tableType = data.tableType
 		this.talbleRemarks = data.talbleRemarks
 		this.lowerCaseTableName = data.lowerCaseTableName
+		data.primaryKeyList.forEach(item => {
+			this.primaryKeyList.push(new PrimaryKey(item))
+		})
+		data.columnVoList.forEach(item => {
+			this.columnVoList.push(new Column(item))
+		})
 	}
 }

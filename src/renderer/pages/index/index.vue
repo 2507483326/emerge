@@ -4,15 +4,14 @@
 		<base-header></base-header>
 		<!--左侧菜单-->
 		<section ref="tableMenuBox">
-			<table-menu :model="item" :key="item.name" @showContextMenu="showContextMenu" v-for="item in dbList"></table-menu>
+			<table-menu ref="tableMenu" :model="item" :key="item.name" @showContextMenu="showContextMenu" v-for="item in menuList"></table-menu>
 		</section>
 		<!--右键菜单-->
 		<context-menu ref="contextMenu"
 					  @update:show="(show) => isRightMenuShow = show"
 					  :show="isRightMenuShow" class="right_menu">
-			<div @click="test">test</div>
-			<div>test</div>
-			<div>test</div>
+			<div @click="refresh">刷新</div>
+			<div @click="close">关闭连接</div>
 		</context-menu>
 	</section>
 </template>
@@ -21,7 +20,7 @@
 	import tableMenu from '@/components/tableMenu'
 	import contextMenu from '@/components/contextMenu'
 	import baseHeader from '@/components/baseHeader'
-	import { mapState } from 'vuex'
+	import { mapGetters } from 'vuex'
 	export default {
 		data () {
 			return {
@@ -30,15 +29,22 @@
 			}
 		},
 		computed: {
-			...mapState({
-				dbList: state => state.db.dbList
+			...mapGetters({
+				menuList: 'menuList'
 			})
 		},
 		mounted () {
 		},
 		methods: {
-			test ($event) {
-				console.log($event)
+			refresh () {
+				this.$refs.tableMenu.forEach(item => {
+					item.refreshDb(this.selectModel.id)
+				})
+				this.isRightMenuShow = false
+			},
+			close ($event) {
+				this.$store.dispatch('closeConnect', this.selectModel.id)
+				this.isRightMenuShow = false
 			},
 			showContextMenu ($event, model) {
 				this.selectModel = model
