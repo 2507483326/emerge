@@ -1,12 +1,14 @@
 import Column from './Column'
-import Menu from './Menu'
+import DbMenu from './DbMenu'
+import FolderMenu from './FolderMenu'
 import PrimaryKey from './PrimaryKey'
 import SqlConnect from './SqlConnect'
 import Table from './Table'
 import TableVo from './TableVo'
 export {
 	Column,
-	Menu,
+	DbMenu,
+	FolderMenu,
 	PrimaryKey,
 	SqlConnect,
 	Table,

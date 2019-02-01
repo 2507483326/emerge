@@ -1,35 +1,25 @@
 <template>
 	<section>
 		<div class="header_box">
-			<div class="connect_box list_box" @click="open">
+			<router-link tag="div" to="/" class="connect_box list_box">
 				<div class="iconfont icon-shebeilianjiehoubiaozhi"></div>
 				<div class="content">连接</div>
-			</div>
+			</router-link>
+			<router-link tag="div" to="/template" class="connect_box list_box">
+				<div class="iconfont icon-moban"></div>
+				<div class="content">模板</div>
+			</router-link>
 		</div>
-		<!--弹窗-->
-		<section class="modal_box">
-			<new-connect-model ref="newConnectModel" @addDbLibrary="addDbLibrary"></new-connect-model>
-		</section>
 	</section>
 </template>
 
 <script>
-	import newConnectModel from '@/components/newConnectModel'
 	export default {
 		data () {
 			return {
 			}
 		},
 		methods: {
-			open () {
-				this.$refs.newConnectModel.show()
-			},
-			addDbLibrary (sqlConnect) {
-				console.log(sqlConnect)
-			}
-		},
-		components: {
-			newConnectModel
 		}
 	}
 </script>
@@ -52,6 +42,7 @@
 			width 90px
 			border-radius 10px
 			border 1px solid #eee
+			margin-right 10px
 			&:hover
 				background #eee
 			.iconfont

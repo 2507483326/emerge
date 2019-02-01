@@ -1,5 +1,5 @@
 import UUID from "uuid-js"
-import { Menu } from '@/model'
+import { DbMenu } from '@/model'
 import clone from 'clone'
 const getters = {
 	saveJson: state => {
@@ -10,6 +10,7 @@ const getters = {
 			return item
 		})
 		saveObj.dbList = saveDbList
+		saveObj.templateList = state.template.templateList
 		return saveObj
 	},
 	menuList: state => {
@@ -21,7 +22,7 @@ const getters = {
 			})
 			if (tableVo && item.isConnect) {
 				tableVo.tableList.forEach(tableItem => {
-					item.children.push(new Menu({
+					item.children.push(new DbMenu({
 						id: UUID.create().toString(),
 						dbId: dbId,
 						name: tableItem.tableName

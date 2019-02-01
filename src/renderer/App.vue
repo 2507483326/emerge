@@ -11,6 +11,7 @@
 		methods: {
 			init () {
 				this.$store.dispatch('initDb')
+				this.$store.dispatch('initTemplate')
 			}
 		}
 	}
@@ -34,4 +35,6 @@
 		height 100%
 		display flex
 		flex-direction column
+	.h-tooltip
+		word-break break-all
 </style>

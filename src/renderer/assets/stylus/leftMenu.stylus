@@ -1,0 +1,9 @@
+.left_menu_box
+	width 200px
+	overflow-y auto
+	overflow-x auto
+	box-sizing border-box
+	background #fff
+	.left_menu_inner
+		width fit-content
+		padding 10px

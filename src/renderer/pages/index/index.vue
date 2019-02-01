@@ -5,9 +5,9 @@
 		<!--main-->
 		<div class="main_box">
 			<!--左侧菜单-->
-			<section ref="tableMenuBox" class="table_menu_wrap">
-				<div class="table_menu_inner">
-					<table-menu ref="tableMenu" :model="item" :key="item.name"
+			<section ref="tableMenuBox" class="left_menu_box" @contextmenu.prevent.self.stop="showContextMenu">
+				<div class="left_menu_inner">
+					<table-menu ref="tableMenu" :model="item" :key="item.id"
 								@showContextMenu="showContextMenu" v-for="item in menuList"></table-menu>
 				</div>
 			</section>
@@ -23,10 +23,19 @@
 		<context-menu ref="contextMenu"
 					  @update:show="(show) => isRightMenuShow = show"
 					  :show="isRightMenuShow" class="right_menu">
-			<div @click="refresh">刷新</div>
-			<div @click="close">关闭连接</div>
-			<div @click="deleteDb">删除</div>
+			<template v-if="menuSelectModel == null">
+				<div @click="addDbLibrary">新建连接</div>
+			</template>
+			<template v-else>
+				<div @click="refresh">刷新</div>
+				<div @click="close">关闭连接</div>
+				<div @click="deleteDb">删除</div>
+			</template>
 		</context-menu>
+		<!--弹窗-->
+		<section class="modal_box">
+			<new-connect-model ref="newConnectModel"></new-connect-model>
+		</section>
 	</section>
 </template>
 
@@ -34,6 +43,7 @@
 	import tableMenu from '@/components/tableMenu'
 	import contextMenu from '@/components/contextMenu'
 	import baseHeader from '@/components/baseHeader'
+	import newConnectModel from '@/components/newConnectModel'
 	import { mapGetters } from 'vuex'
 	export default {
 		data () {
@@ -88,31 +98,27 @@
 			selectTable (data) {
 				let tableVo = this.$store.getters.tableDetail(data)
 				this.columnVoList = tableVo.columnVoList
+			},
+			addDbLibrary () {
+				this.$refs.newConnectModel.show()
 			}
 		},
 		components: {
 			baseHeader,
 			tableMenu,
-			contextMenu
+			contextMenu,
+			newConnectModel
 		}
 	}
 </script>
 
 <style lang="stylus" scoped>
+	@import "../../assets/stylus/leftMenu.stylus"
 	/* CSS */
 	.main_box
 		display flex
 		margin-top 10px
 		flex 1
-		.table_menu_wrap
-			width 200px
-			overflow-y auto
-			overflow-x auto
-			box-sizing border-box
-			background #fff
-			.table_menu_inner
-				width fit-content
-				padding 10px
 		.table_detail_box
 			flex 1
 			background #fff

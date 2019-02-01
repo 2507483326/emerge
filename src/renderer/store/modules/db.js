@@ -1,4 +1,4 @@
-import { Menu, TableVo, Table } from '@/model'
+import { DbMenu, TableVo, Table } from '@/model'
 import UUID from 'uuid-js'
 import fs from 'fs-extra'
 const state = {
@@ -37,7 +37,7 @@ const mutations = {
 
 const actions = {
 	addDb ({ getters, commit }, sqlConnectConfig) {
-		let db = new Menu({
+		let db = new DbMenu({
 			id: UUID.create().toString(),
 			name: `${sqlConnectConfig.name} (${sqlConnectConfig.mysqlDB})`,
 			isDbLibrary: true,

@@ -1,36 +1,37 @@
 <template>
 	<div class="table_menu_box" v-if="model">
 		<div
+			v-tooltip
+			placement="top-start"
+			theme="white"
+			className="test"
+			:content="model.path"
 			class="title_box"
 			tabindex="0"
 			@dblclick="changeType"
 			@contextmenu="showContextMenu">
-			<div class="iconfont" :class="{'icon-shujuku': model.isDbLibrary && !isConnect, 'icon-jiazai': isConnect,
-			'loading': isConnect, 'connect': model.isConnect, 'icon-biao': !model.isDbLibrary}"></div>
+			<div class="iconfont"></div>
 			<div class="name">{{ model.name }}</div>
 		</div>
 		<div class="child_box" v-show="open" v-if="isHasChildren">
-			<table-menu
+			<template-menu
 				class="item"
 				v-for="(model, index) in model.children"
 				:key="item.id"
 				:model="model">
-			</table-menu>
+			</template-menu>
 		</div>
 	</div>
 </template>
 
 <script>
-	import { db } from '@/mixins'
 	export default {
-		name: 'table-menu',
-		mixins: [db],
+		name: 'template-menu',
 		props: {
 			model: Object
 		},
 		data () {
 			return {
-				isConnect: false,
 				open: false
 			}
 		},
@@ -41,31 +42,8 @@
 			}
 		},
 		methods: {
-			async changeType () {
-				if (!this.model.isDbLibrary) {
-					this.$bus.emit('selectTable', {dbId: this.model.dbId, tableName: this.model.name})
-					return
-				}
-				if (!this.isHasChildren && !this.model.isConnect) {
-					await this.connectDb()
-				}
-				this.$nextTick(() => {
-					if (this.isHasChildren) {
-						this.open = !this.open
-					}
-				})
-			},
-			showContextMenu ($event) {
-				this.$emit('showContextMenu', $event, this.model)
-			},
-			async refreshDb (id) {
-				if (!this.model.isDbLibrary) {
-					return
-				}
-				if (id === this.model.id) {
-					await this.connectDb()
-				}
-			}
+			changeType () {},
+			showContextMenu () {}
 		}
 	}
 </script>
