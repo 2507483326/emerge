@@ -7,7 +7,7 @@
 			<!--左侧菜单-->
 			<section ref="leftMenuBox" class="left_menu_box" @contextmenu.prevent.self.stop="showContextMenu">
 				<div class="left_menu_inner">
-					 <template-menu ref="templeteMenu" :model="item" :key="item.id" v-for="item in templateList"></template-menu>
+					 <template-menu @showContextMenu="showContextMenu" ref="templateMenu" :model="item" :key="item.id" v-for="item in templateList"></template-menu>
 				</div>
 			</section>
 		</div>
@@ -17,7 +17,10 @@
 					  @update:show="(show) => isRightMenuShow = show"
 					  :show="isRightMenuShow" class="right_menu">
 			<template v-if="menuSelectModel == null">
-				<div @click="addTempletFolder">新建模板文件夹</div>
+				<div @click="addTemplateFolder">新建模板文件夹</div>
+			</template>
+			<template v-else>
+				<div @click="deleteTemplate">删除模板文件夹</div>
 			</template>
 		</context-menu>
 		<!--弹窗-->
@@ -51,9 +54,19 @@
 				this.$refs.contextMenu.contextMenuHandler($event)
 				this.isRightMenuShow = true
 			},
-			addTempletFolder () {
+			addTemplateFolder () {
 				this.$refs.newTemplateFolder.show()
 				this.isRightMenuShow = false
+			},
+			deleteTemplate () {
+				this.$Confirm("删除模板文件夹和下面所有的模板文件", "确定删除？").then(async () => {
+					try {
+						await this.$store.dispatch('deleteTemplate', this.menuSelectModel.id)
+						this.$Message['success']('删除成功!')
+					} catch (e) {
+						this.$Message['error']('删除失败')
+					}
+				})
 			}
 		},
 		components: {

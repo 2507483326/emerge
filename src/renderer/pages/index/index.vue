@@ -85,9 +85,13 @@
 			},
 			deleteDb () {
 				this.isRightMenuShow = false
-				this.$Confirm("确定删除？", "删除数据库").then(async () => {
-					await this.$store.dispatch('deleteDb', this.menuSelectModel.id)
-					this.$Message.success('删除成功！')
+				this.$Confirm("删除数据库", "确定删除？").then(async () => {
+					try {
+						await this.$store.dispatch('deleteDb', this.menuSelectModel.id)
+						this.$Message['success']('删除成功！')
+					} catch (e) {
+						this.$Message['error']('删除失败')
+					}
 				})
 			},
 			showContextMenu ($event, model) {

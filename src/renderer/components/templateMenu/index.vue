@@ -10,7 +10,7 @@
 			tabindex="0"
 			@dblclick="changeType"
 			@contextmenu="showContextMenu">
-			<div class="iconfont"></div>
+			<div class="iconfont" :class="{'icon-wenjian': model.isFolder}"></div>
 			<div class="name">{{ model.name }}</div>
 		</div>
 		<div class="child_box" v-show="open" v-if="isHasChildren">
@@ -43,7 +43,9 @@
 		},
 		methods: {
 			changeType () {},
-			showContextMenu () {}
+			showContextMenu ($event) {
+				this.$emit('showContextMenu', $event, this.model)
+			}
 		}
 	}
 </script>
