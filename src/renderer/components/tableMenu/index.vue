@@ -12,9 +12,9 @@
 		<div class="child_box" v-show="open" v-if="isHasChildren">
 			<table-menu
 				class="item"
-				v-for="(model, index) in model.children"
-				:key="item.id"
-				:model="model">
+				v-for="childrenItem in model.children"
+				:key="childrenItem.id"
+				:model="childrenItem">
 			</table-menu>
 		</div>
 	</div>
@@ -43,7 +43,7 @@
 		methods: {
 			async changeType () {
 				if (!this.model.isDbLibrary) {
-					this.$bus.emit('selectTable', {dbId: this.model.dbId, tableName: this.model.name})
+					this.$bus.emit('selectTable', {dbId: this.model.dbId, id: this.model.id})
 					return
 				}
 				if (!this.isHasChildren && !this.model.isConnect) {
@@ -73,10 +73,12 @@
 <style lang="stylus" scoped>
 	.table_menu_box
 		width fit-content
+		min-width 100%
 		.title_box
 			display flex
 			align-items center
 			width fit-content
+			min-width 100%
 			justify-content flex-start
 			cursor pointer
 			user-select none

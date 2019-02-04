@@ -5,7 +5,6 @@ process.env.BABEL_ENV = 'renderer'
 const path = require('path')
 const {dependencies} = require('../package.json')
 const webpack = require('webpack')
-
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -24,7 +23,12 @@ let whiteListedModules = ['vue']
 let rendererConfig = {
 	devtool: '#cheap-module-eval-source-map',
 	entry: {
-		renderer: path.join(__dirname, '../src/renderer/main.js')
+		renderer: path.join(__dirname, '../src/renderer/main.js'),
+		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
+		"json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
+		"css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
+		"html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
+		"ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
 	},
 	externals: [
 		...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d))
@@ -145,6 +149,7 @@ let rendererConfig = {
 	output: {
 		filename: '[name].js',
 		libraryTarget: 'commonjs2',
+		chunkFilename: '[name].bundle.js',
 		path: path.join(__dirname, '../dist/electron')
 	},
 	resolve: {

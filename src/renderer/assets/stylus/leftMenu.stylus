@@ -6,4 +6,5 @@
 	background #fff
 	.left_menu_inner
 		width fit-content
+		min-width 100%
 		padding 10px

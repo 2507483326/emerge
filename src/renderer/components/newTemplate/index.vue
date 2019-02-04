@@ -1,11 +1,10 @@
 <template>
 	<Modal v-model="isShow" :middle="true">
 		<!--顶部-->
-		<div slot="header">新建模板文件夹</div>
+		<div slot="header">新建模板</div>
 		<Form ref="form" :label-position="'left'" :label-width="60" :rules="validationRules" :model="templateData">
-			<FormItem label="路径" prop="path">
-				<input type="text" placeholder="请输入路径名称" v-model="templateData.path" />
-				<Button icon="iconfont icon-gengduo" class="select_path" @click="selectPath"></Button>
+			<FormItem label="名称" prop="name">
+				<input type="text" placeholder="请输入模板名称" v-model="templateData.name" />
 			</FormItem>
 		</Form>
 		<Loading text="加载中" :loading="loading"></Loading>
@@ -13,7 +12,7 @@
 		<div slot="footer" class="button_box">
 			<section class="button_box">
 				<Button @click="isShow = false">取消</Button>
-				<Button color="primary" @click="addTemplateFolder">确定</Button>
+				<Button color="primary" @click="addTemplate">确定</Button>
 			</section>
 		</div>
 	</Modal>
@@ -26,36 +25,35 @@
 		data () {
 			return {
 				templateData: {
-					path: ''
+					name: ''
 				},
 				validationRules: {
-					required: ['path']
+					required: ['name']
 				},
+				model: null,
 				isShow: false,
 				loading: false,
 				isShowSelectPath: false
 			}
 		},
 		methods: {
-			show () {
+			show (model) {
 				this.templateData = {
-					path: ''
+					name: ''
 				}
+				this.model = model
 				this.isShow = true
 			},
 			@noRepeat
-			async addTemplateFolder () {
+			async addTemplate () {
 				this.loading = true
 				try {
 					let validResult = this.$refs.form.valid()
 					if (!validResult.result) return false
-					let pathArray = this.templateData.path.replace('/', '\\').split('\\')
-					let folderName = pathArray[pathArray.length - 1]
-					await this.$store.dispatch('addTemplateFolder', {
-						name: folderName,
-						path: this.templateData.path
+					this.$store.dispatch('addTemplate', {
+						folderId: this.model.id,
+						name: this.templateData.name
 					})
-					this.$Message['success']('创建模板文件夹成功')
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
@@ -83,15 +81,5 @@
 </script>
 
 <style lang="stylus" scoped>
-	.h-form
-		.h-form-item
-			>>> .h-form-item-wrap
-				display flex
-				.select_path
-					word-break keep-all
-					margin-left 10px
-					.iconfont
-						font-size 13px
-			&:last-child
-				padding-bottom 0
+
 </style>

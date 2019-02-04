@@ -1,5 +1,5 @@
 import UUID from 'uuid-js'
-import { FolderMenu } from '@/model'
+import { FolderMenu, Template } from '@/model'
 import fs from 'fs-extra'
 import clone from 'clone'
 const state = {
@@ -12,6 +12,14 @@ const mutations = {
 	},
 	ADD_TEMPLATE_FOLDER (state, data) {
 		state.templateList.push(data)
+	},
+	ADD_TEMPLATE (state, data) {
+		console.log(data)
+		let templateList = state.templateList.find(item => {
+			return item.id === data.folderId
+		})
+		templateList.children.push(data.data)
+		console.log(state)
 	},
 	DELETE_TEMPLATE (state, id) {
 		let templateList = clone(state.templateList)
@@ -39,6 +47,25 @@ const actions = {
 		}))
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	},
+	addTemplate ({ getters, state, commit }, data) {
+		let folder = state.templateList.find(item => {
+			return item.id === data.folderId
+		})
+		let filePath = `${folder.path}\\${data.name}.art`
+		console.log(filePath)
+		fs.ensureFileSync(filePath)
+		console.log(data)
+		commit('ADD_TEMPLATE', {
+			folderId: data.folderId,
+			data: new Template({
+				id: UUID.create().toString(),
+				folderId: data.folderId,
+				name: data.name,
+				path: filePath
+			})
+		})
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
 	initTemplate ({ state, commit }) {
 		try {
 			fs.ensureFileSync('./userData/default.json')
@@ -50,7 +77,7 @@ const actions = {
 			console.warn('default.json解析失败')
 		}
 	},
-	deleteTemplate ({ getters, commit }, id) {
+	deleteTemplateFolder ({ getters, commit }, id) {
 		commit('DELETE_TEMPLATE', id)
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	}

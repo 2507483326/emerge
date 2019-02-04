@@ -4,7 +4,6 @@ process.env.BABEL_ENV = 'web'
 
 const path = require('path')
 const webpack = require('webpack')
-
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -14,7 +13,12 @@ const {VueLoaderPlugin} = require('vue-loader')
 let webConfig = {
 	devtool: '#cheap-module-eval-source-map',
 	entry: {
-		web: path.join(__dirname, '../src/renderer/main.js')
+		web: path.join(__dirname, '../src/renderer/main.js'),
+		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
+		"json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
+		"css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
+		"html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
+		"ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
 	},
 	module: {
 		rules: [
@@ -116,7 +120,9 @@ let webConfig = {
 		new webpack.NoEmitOnErrorsPlugin()
 	],
 	output: {
+		globalObject: 'self',
 		filename: '[name].js',
+		chunkFilename: '[name].bundle.js',
 		path: path.join(__dirname, '../dist/web')
 	},
 	resolve: {

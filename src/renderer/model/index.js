@@ -5,6 +5,7 @@ import PrimaryKey from './PrimaryKey'
 import SqlConnect from './SqlConnect'
 import Table from './Table'
 import TableVo from './TableVo'
+import Template from './Template'
 export {
 	Column,
 	DbMenu,
@@ -12,5 +13,6 @@ export {
 	PrimaryKey,
 	SqlConnect,
 	Table,
-	TableVo
+	TableVo,
+	Template
 }

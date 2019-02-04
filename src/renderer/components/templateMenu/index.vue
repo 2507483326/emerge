@@ -1,24 +1,23 @@
 <template>
 	<div class="table_menu_box" v-if="model">
-		<div
-			v-tooltip
-			placement="top-start"
-			theme="white"
-			className="test"
-			:content="model.path"
-			class="title_box"
-			tabindex="0"
-			@dblclick="changeType"
-			@contextmenu="showContextMenu">
-			<div class="iconfont" :class="{'icon-wenjian': model.isFolder}"></div>
-			<div class="name">{{ model.name }}</div>
-		</div>
+		<Tooltip theme="white" :content="model.path" :disabled="!model.isFolder">
+			<div
+				class="title_box"
+				tabindex="0"
+				@dblclick="changeType"
+				@contextmenu="showContextMenu">
+				<div class="iconfont"
+					 :class="{'icon-wenjianjia1': model.isFolder,
+					 'icon-iconfontmoban': !model.isFolder}"></div>
+				<div class="name">{{ model.name }}</div>
+			</div>
+		</Tooltip>
 		<div class="child_box" v-show="open" v-if="isHasChildren">
 			<template-menu
 				class="item"
-				v-for="(model, index) in model.children"
-				:key="item.id"
-				:model="model">
+				v-for="childrenItem in model.children"
+				:key="childrenItem.id"
+				:model="childrenItem">
 			</template-menu>
 		</div>
 	</div>
@@ -42,7 +41,15 @@
 			}
 		},
 		methods: {
-			changeType () {},
+			changeType () {
+				if (!this.model.isFolder) {
+					this.$bus.emit('selectTemplate', {folderId: this.model.folderId, id: this.model.id})
+					return
+				}
+				if (this.isHasChildren) {
+					this.open = !this.open
+				}
+			},
 			showContextMenu ($event) {
 				this.$emit('showContextMenu', $event, this.model)
 			}
@@ -53,10 +60,12 @@
 <style lang="stylus" scoped>
 	.table_menu_box
 		width fit-content
+		min-width 100%
 		.title_box
 			display flex
 			align-items center
 			width fit-content
+			min-width 100%
 			justify-content flex-start
 			cursor pointer
 			user-select none

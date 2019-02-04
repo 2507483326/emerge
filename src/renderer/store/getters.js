@@ -34,14 +34,20 @@ const getters = {
 		return menuList
 	},
 	tableDetail: state => data => {
-		let tableVo = state.db.tableList.find(item => {
+		let tableListVo = state.db.tableList.find(item => {
 			return item.id === data.dbId
 		})
-		console.log(data.tableName)
-		let tableDetail = tableVo.tableList.find(item => {
-			return item.tableName === data.tableName
+		return tableListVo.tableList.find(item => {
+			return item.id === data.id
 		})
-		return tableDetail
+	},
+	templateDetail: state => data => {
+		let templateListVo = state.template.templateList.find(item => {
+			return item.id === data.folderId
+		})
+		return templateListVo.children.find(item => {
+			return item.id === data.id
+		})
 	}
 }
 export default getters
