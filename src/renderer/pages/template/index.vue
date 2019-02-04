@@ -16,8 +16,19 @@
 			</section>
 			<!--模板详细-->
 			<section class="template_detail_box">
+				<Form class="form_box" ref="form" :label-position="'left'" :label-width="90" :rules="validationRules" :model="templateData">
+					<FormItem label="模板名称" prop="path">
+						<input type="text" placeholder="请输入生成模板名称" v-model="templateData.name" />
+					</FormItem>
+					<FormItem label="模板名称" prop="language">
+						<Select v-model="templateData.language" :datas="languageList" :nullOption="false" placeholder="选择语言" @change="changeLanguage"></Select>
+					</FormItem>
+				</Form>
 				<div class="editor_box">
 					<web-editor></web-editor>
+				</div>
+				<div class="button_box">
+					<Button color="primary" @click="saveTemplate">保存</Button>
 				</div>
 			</section>
 		</div>
@@ -55,7 +66,21 @@
 			return {
 				isRightMenuShow: false,
 				menuSelectModel: null,
-				templateDetail: null
+				templateDetail: null,
+				languageList: ['javascript'],
+				templateData: {
+					name: null,
+					language: 'javascript'
+				},
+				validationRules: {
+					rules: {
+						name: {
+							maxLen: 20,
+							minLen: 1
+						}
+					},
+					required: ['name']
+				}
 			}
 		},
 		computed: {
@@ -89,7 +114,9 @@
 			},
 			selectTemplate (data) {
 				this.templateDetail = this.$store.getters.templateDetail(data)
-			}
+			},
+			saveTemplate () {},
+			changeLanguage () {}
 		},
 		components: {
 			baseHeader,
@@ -117,8 +144,24 @@
 		display none
 	.template_detail_box
 		flex 1
+		overflow hidden
 		height 100%
+		display flex
+		height 100%
+		flex-direction column
+		padding 10px
+		box-sizing border-box
+		background #fff
+		margin-left 10px
+		.form_box
+			margin-bottom 10px
 		.editor_box
 			width 100%
-			height 100%
+			flex 1
+		.button_box
+			padding 10px
+			box-sizing border-box
+			overflow hidden
+			button
+				float right
 </style>

@@ -37,4 +37,8 @@
 		flex-direction column
 	.h-tooltip
 		word-break break-all
+	.h-form
+		.h-form-item
+			&:last-child
+				padding-bottom 0
 </style>

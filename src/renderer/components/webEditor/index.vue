@@ -1,5 +1,7 @@
 <template>
-	<div ref="editor" id="container"></div>
+	<div ref="editorBox" class="editor_wrap">
+		<div ref="editor" class="editor"></div>
+	</div>
 </template>
 
 <script>
@@ -9,27 +11,14 @@
 	import '@/assets/lib/monaco/language'
 
 	export default {
+		data () {
+			return {
+				monacoEditor: null
+			}
+		},
 		mounted () {
 			// eslint-disable-next-line
-			self.MonacoEnvironment = {
-				getWorkerUrl: function (moduleId, label) {
-					if (label === 'json') {
-						return './json.worker.js'
-					}
-					if (label === 'css') {
-						return './css.worker.js'
-					}
-					if (label === 'html') {
-						return './html.worker.js'
-					}
-					if (label === 'typescript' || label === 'javascript') {
-						return './ts.worker.js'
-					}
-					return './editor.worker.js'
-				}
-			}
-			// eslint-disable-next-line
-			monaco.editor.create(this.$refs.editor, {
+			this.monacoEditor = monaco.editor.create(this.$refs.editor, {
 				value: [
 					'function x() {',
 					'\tconsole.log("Hello world!");',
@@ -37,13 +26,24 @@
 				].join('\n'),
 				language: 'javascript'
 			})
+			// this.$refs.editorBox.onresize = this.resize()
+		},
+		methods: {
+			resize () {
+				console.log(this.$refs.editorBox.clientWidth)
+				let width = this.$refs.editorBox.clientWidth
+				this.monacoEditor.getLayoutInfo().width = width
+			}
 		}
 	}
 </script>
 
 <style lang="stylus" scoped>
-	#container
+	.editor_wrap
 		width 100%
 		height 100%
-		background #fff
+		overflow hidden
+		.editor
+			width 100%
+			height 100%
 </style>
