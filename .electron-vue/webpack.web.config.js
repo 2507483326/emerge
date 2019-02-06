@@ -6,6 +6,7 @@ const path = require('path')
 const webpack = require('webpack')
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {VueLoaderPlugin} = require('vue-loader')
@@ -13,12 +14,7 @@ const {VueLoaderPlugin} = require('vue-loader')
 let webConfig = {
 	devtool: '#cheap-module-eval-source-map',
 	entry: {
-		web: path.join(__dirname, '../src/renderer/main.js'),
-		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
-		"json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
-		"css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
-		"html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
-		"ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
+		web: path.join(__dirname, '../src/renderer/main.js')
 	},
 	module: {
 		rules: [
@@ -116,6 +112,7 @@ let webConfig = {
 		new webpack.DefinePlugin({
 			'process.env.IS_WEB': 'true'
 		}),
+		new MonacoWebpackPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoEmitOnErrorsPlugin()
 	],

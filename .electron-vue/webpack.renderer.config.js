@@ -7,6 +7,7 @@ const {dependencies} = require('../package.json')
 const webpack = require('webpack')
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {VueLoaderPlugin} = require('vue-loader')
@@ -23,12 +24,7 @@ let whiteListedModules = ['vue']
 let rendererConfig = {
 	devtool: '#cheap-module-eval-source-map',
 	entry: {
-		renderer: path.join(__dirname, '../src/renderer/main.js'),
-		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
-		"json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
-		"css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
-		"html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
-		"ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
+		renderer: path.join(__dirname, '../src/renderer/main.js')
 	},
 	externals: [
 		...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d))
@@ -143,6 +139,7 @@ let rendererConfig = {
 				? path.resolve(__dirname, '../node_modules')
 				: false
 		}),
+		new MonacoWebpackPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoEmitOnErrorsPlugin()
 	],

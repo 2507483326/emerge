@@ -8,29 +8,35 @@
 			<section ref="leftMenuBox" class="left_menu_box" @contextmenu.prevent.self.stop="showContextMenu">
 				<div class="left_menu_inner">
 					 <template-menu @showContextMenu="showContextMenu"
-									@selectTemplate="selectTemplate"
 									ref="templateMenu"
 									:model="item"
 									:key="item.id" v-for="item in templateList"></template-menu>
 				</div>
 			</section>
 			<!--模板详细-->
-			<section class="template_detail_box">
+			<section class="template_detail_box" v-show="templateDetail">
 				<Form class="form_box" ref="form" :label-position="'left'" :label-width="90" :rules="validationRules" :model="templateData">
-					<FormItem label="模板名称" prop="path">
-						<input type="text" placeholder="请输入生成模板名称" v-model="templateData.name" />
-					</FormItem>
-					<FormItem label="模板名称" prop="language">
-						<Select v-model="templateData.language" :datas="languageList" :nullOption="false" placeholder="选择语言" @change="changeLanguage"></Select>
-					</FormItem>
+					<Row>
+						<Col width="12">
+							<FormItem label="模板名称" prop="path">
+								<input type="text" placeholder="请输入生成模板名称" v-model="templateData.name" />
+							</FormItem>
+						</Col>
+						<Col width="12">
+							<FormItem label="模板语言" prop="language">
+								<Select v-model="templateData.language" :datas="languageList" :nullOption="false" placeholder="选择语言" @change="changeLanguage"></Select>
+							</FormItem>
+						</Col>
+					</Row>
 				</Form>
 				<div class="editor_box">
-					<web-editor></web-editor>
+					<web-editor ref="editor" :model="templateDetail"></web-editor>
 				</div>
 				<div class="button_box">
 					<Button color="primary" @click="saveTemplate">保存</Button>
 				</div>
 			</section>
+			<section class="template_detail_box" v-show="!templateDetail"></section>
 		</div>
 
 		<!--右键菜单-->
@@ -88,6 +94,12 @@
 				templateList: state => state.template.templateList
 			})
 		},
+		created () {
+			this.$bus.on('selectTemplate', this.selectTemplate)
+		},
+		beforeDestroy () {
+			this.$bus.off('selectTemplate', this.selectTemplate)
+		},
 		methods: {
 			showContextMenu ($event, model) {
 				this.menuSelectModel = model
@@ -114,6 +126,9 @@
 			},
 			selectTemplate (data) {
 				this.templateDetail = this.$store.getters.templateDetail(data)
+				this.$nextTick(() => {
+					this.$refs.editor.renderEditor()
+				})
 			},
 			saveTemplate () {},
 			changeLanguage () {}
