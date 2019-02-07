@@ -12,6 +12,7 @@
 			init () {
 				this.$store.dispatch('initDb')
 				this.$store.dispatch('initTemplate')
+				this.$store.dispatch('initFilter')
 			}
 		}
 	}

@@ -21,6 +21,15 @@ const mutations = {
 		templateList.children.push(data.data)
 		console.log(state)
 	},
+	CHANGE_TEMPLATE (state, data) {
+		let templateList = state.templateList.find(item => {
+			return item.id === data.folderId
+		})
+		let template = templateList.children.find(item => {
+			return item.id === data.id
+		})
+		template[data.key] = data.value
+	},
 	DELETE_TEMPLATE (state, id) {
 		let templateList = clone(state.templateList)
 		templateList = templateList.map(item => {
@@ -79,6 +88,14 @@ const actions = {
 	},
 	deleteTemplateFolder ({ getters, commit }, id) {
 		commit('DELETE_TEMPLATE', id)
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
+	deleteTemplate ({ commit }, id) {
+		commit('DELETE_TEMPLATE', id)
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
+	changeTemplate ({ getters, commit }, data) {
+		commit('CHANGE_TEMPLATE', data)
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	}
 }

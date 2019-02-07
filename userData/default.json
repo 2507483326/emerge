@@ -1,0 +1,24 @@
+{
+  "dbList": [],
+  "templateList": [
+    {
+      "id": "0ba35ec8-f2f4-484b-b489-595f51d85cb9",
+      "folderId": null,
+      "children": [
+        {
+          "id": "d5d4f004-9af6-4226-9921-1c4de158969b",
+          "folderId": "0ba35ec8-f2f4-484b-b489-595f51d85cb9",
+          "children": [],
+          "name": "ggg",
+          "isFolder": false,
+          "path": "E:\\壁纸\\ggg.art",
+          "generateName": "test",
+          "language": "artHtml"
+        }
+      ],
+      "name": "壁纸",
+      "isFolder": true,
+      "path": "E:\\壁纸"
+    }
+  ]
+}

@@ -10,6 +10,7 @@ const getters = {
 			return item
 		})
 		saveObj.dbList = saveDbList
+		saveObj.filterList = state.filter.filterList
 		saveObj.templateList = state.template.templateList
 		return saveObj
 	},

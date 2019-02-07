@@ -1,14 +1,14 @@
 <template>
-	<div ref="editorBox" class="editor_wrap">
-		<div ref="editor" class="editor"></div>
+	<div class="editor_wrap">
+		<div ref="editorBox" class="inner_box" >
+			<div ref="editor" class="editor"></div>
+		</div>
 	</div>
 </template>
 
 <script>
-	import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js'
-	import 'monaco-editor/esm/vs/editor/contrib/find/findController.js'
-	import * as monaco from 'monaco-editor/esm/vs/editor/edcore.main'
-	import '@/assets/lib/monaco/language'
+	import * as monaco from 'monaco-editor'
+	import '@/assets/lib/monaco'
 	import fs from 'fs-extra'
 
 	export default {
@@ -20,45 +20,76 @@
 				monacoEditor: null
 			}
 		},
+		watch: {
+			'model.language': {
+				handler: function (newVal, oldVal) {
+					if (newVal) {
+						console.log(this)
+						this.changeLanguage(newVal)
+					}
+				},
+				deep: true
+			}
+		},
 		mounted () {
+			console.log('mounted')
+			this.renderEditor()
+			window.addEventListener('resize', this.resizeEditor)
+		},
+		destroyed () {
+			if (this.monacoEditor) {
+				this.monacoEditor.dispose()
+			}
+			window.removeEventListener('resize', this.resizeEditor)
 		},
 		methods: {
 			renderEditor () {
-				console.log(this.model)
-				if (!this.monacoEditor) {
-					this.initEditor()
+				if (this.monacoEditor) {
+					this.monacoEditor.dispose()
 				}
-				// this.readFile()
-				// this.monacoEditor.setValue('test')
+				console.log(this.model)
+				this.initEditor()
+				let content = this.readFile()
+				this.monacoEditor.setValue(content)
 			},
 			initEditor () {
+				console.log(this.model.language)
 				this.monacoEditor = monaco.editor.create(this.$refs.editor, {
-					value: [
-						'function x() {',
-						'\tconsole.log("Hello world!");',
-						'}'
-					].join('\n'),
-					language: 'css'
+					language: this.model.language
 				})
+				console.log(this.monacoEditor)
 				this.monacoEditor.onDidChangeModelContent(this.changeContent)
 			},
 			readFile () {
-				fs.ensureFileSync(this.model.path)
-				let result = fs.readFileSync(this.model.path) + ""
-				console.log(result)
+				try {
+					fs.ensureFileSync(this.model.path)
+					let result = fs.readFileSync(this.model.path) + ""
+					return result
+				} catch (e) {
+					console.error(e)
+					this.$Message['error']('获取文件失败')
+					return null
+				}
 			},
 			async saveFile () {
+				this.$emit('changeState', 1)
 				console.log(this.monacoEditor.getValue())
 				await fs.writeFileSync(this.model.path, this.monacoEditor.getValue())
+				this.$emit('changeState', 2)
 			},
-			resize () {
-				console.log(this.$refs.editorBox.clientWidth)
-				let width = this.$refs.editorBox.clientWidth
-				this.monacoEditor.getLayoutInfo().width = width
+			resizeEditor () {
+				if (this.monacoEditor) {
+					this.monacoEditor.layout()
+				}
 			},
 			changeContent () {
 				console.log('========')
 				this.saveFile()
+			},
+			changeLanguage () {
+				this.$nextTick(() => {
+					this.renderEditor()
+				})
 			}
 		}
 	}
@@ -66,10 +97,17 @@
 
 <style lang="stylus" scoped>
 	.editor_wrap
+		position relative
 		width 100%
 		height 100%
 		overflow hidden
-		.editor
-			width 100%
-			height 100%
+		.inner_box
+			position absolute
+			top 0
+			left 0
+			bottom 0
+			right 0
+			.editor
+				width 100%
+				height 100%
 </style>

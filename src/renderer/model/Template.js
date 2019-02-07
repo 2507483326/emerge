@@ -9,10 +9,12 @@ export default class Template extends FolderMenu {
 		name = "",
 		isFolder = false,
 		path = '',
-		generateName = ''
+		generateName = '',
+		language = 'artHtml'
 	}) {
 		super({id, folderId, children, name, isFolder, path})
 		this.generateName = generateName
+		this.language = language
 	}
 
 }

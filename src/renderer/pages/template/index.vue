@@ -7,33 +7,37 @@
 			<!--左侧菜单-->
 			<section ref="leftMenuBox" class="left_menu_box" @contextmenu.prevent.self.stop="showContextMenu">
 				<div class="left_menu_inner">
-					 <template-menu @showContextMenu="showContextMenu"
-									ref="templateMenu"
-									:model="item"
-									:key="item.id" v-for="item in templateList"></template-menu>
+					<template-menu
+						ref="templateMenu"
+						:model="item"
+						:key="item.id" v-for="item in templateList"></template-menu>
 				</div>
 			</section>
 			<!--模板详细-->
 			<section class="template_detail_box" v-show="templateDetail">
-				<Form class="form_box" ref="form" :label-position="'left'" :label-width="90" :rules="validationRules" :model="templateData">
+				<Form class="form_box" ref="form" :label-position="'left'" :label-width="90" :rules="validationRules"
+					  :model="templateData">
 					<Row>
 						<Col width="12">
-							<FormItem label="模板名称" prop="path">
-								<input type="text" placeholder="请输入生成模板名称" v-model="templateData.name" />
+							<FormItem label="模板名称" prop="generateName">
+								<input type="text" placeholder="请输入生成模板名称" v-model="templateData.generateName"/>
 							</FormItem>
 						</Col>
 						<Col width="12">
 							<FormItem label="模板语言" prop="language">
-								<Select v-model="templateData.language" :datas="languageList" :nullOption="false" placeholder="选择语言" @change="changeLanguage"></Select>
+								<Select v-model="templateData.language" :datas="languageList" :nullOption="false"
+										placeholder="选择语言" @change="changeLanguage"></Select>
 							</FormItem>
 						</Col>
 					</Row>
 				</Form>
 				<div class="editor_box">
-					<web-editor ref="editor" :model="templateDetail"></web-editor>
+					<web-editor ref="editor" :model="templateDetail"
+								@changeState="(state) => edtorState = state"></web-editor>
 				</div>
-				<div class="button_box">
-					<Button color="primary" @click="saveTemplate">保存</Button>
+				<div class="tip_box">
+					<div v-show="edtorState === 1">保存中...</div>
+					<div v-show="edtorState === 2">已保存</div>
 				</div>
 			</section>
 			<section class="template_detail_box" v-show="!templateDetail"></section>
@@ -46,9 +50,12 @@
 			<template v-if="menuSelectModel == null">
 				<div @click="addTemplateFolder">新建模板文件夹</div>
 			</template>
-			<template v-else>
+			<template v-else-if="menuSelectModel.isFolder == true">
 				<div @click="deleteTemplateFolder">删除模板文件夹</div>
 				<div @click="createTemplate">新建模板</div>
+			</template>
+			<template v-else-if="menuSelectModel.isFolder == false">
+				<div @click="deleteTemplate">删除模板</div>
 			</template>
 		</context-menu>
 		<!--弹窗-->
@@ -66,27 +73,54 @@
 	import newTemplateFolder from '@/components/newTemplateFolder'
 	import newTemplate from '@/components/newTemplate'
 	import webEditor from '@/components/webEditor'
-	import { mapState } from 'vuex'
+	import {mapState} from 'vuex'
+
 	export default {
 		data () {
 			return {
 				isRightMenuShow: false,
 				menuSelectModel: null,
 				templateDetail: null,
-				languageList: ['javascript'],
+				languageList: [
+					{
+						title: 'html',
+						key: 'artHtml'
+					},
+					{
+						title: 'java',
+						key: 'artJava'
+					}
+				],
 				templateData: {
-					name: null,
-					language: 'javascript'
+					generateName: null,
+					language: 'artHtml'
 				},
 				validationRules: {
 					rules: {
-						name: {
+						generateName: {
 							maxLen: 20,
 							minLen: 1
 						}
 					},
-					required: ['name']
+					required: ['generateName', 'language']
+				},
+				edtorState: 0
+			}
+		},
+		watch: {
+			edtorState (newVal) {
+				if (newVal === 2) {
+					clearTimeout(this.stateTimeout)
+					this.stateTimeout = setTimeout(() => {
+						this.edtorState = 0
+					}, 500)
 				}
+			},
+			'templateData.generateName': {
+				handler: function (newVal) {
+					this.changeGenerateName(newVal)
+				},
+				deep: true
 			}
 		},
 		computed: {
@@ -96,12 +130,14 @@
 		},
 		created () {
 			this.$bus.on('selectTemplate', this.selectTemplate)
+			this.$bus.on('showTemplateContextMenu', this.showContextMenu)
 		},
 		beforeDestroy () {
 			this.$bus.off('selectTemplate', this.selectTemplate)
 		},
 		methods: {
 			showContextMenu ($event, model) {
+				console.log('[][][][][][]')
 				this.menuSelectModel = model
 				this.$refs.contextMenu.contextMenuHandler($event)
 				this.isRightMenuShow = true
@@ -124,14 +160,39 @@
 				this.$refs.newTemplate.show(this.menuSelectModel)
 				this.isRightMenuShow = false
 			},
+			async deleteTemplate () {
+				this.edtorState = 1
+				await this.$store.dispatch('deleteTemplate', this.menuSelectModel.id)
+				this.edtorState = 2
+			},
 			selectTemplate (data) {
 				this.templateDetail = this.$store.getters.templateDetail(data)
 				this.$nextTick(() => {
+					this.templateData.language = this.templateDetail.language
+					this.templateData.generateName = this.templateDetail.generateName
 					this.$refs.editor.renderEditor()
 				})
 			},
-			saveTemplate () {},
-			changeLanguage () {}
+			async changeGenerateName (name) {
+				this.edtorState = 1
+				await this.$store.dispatch('changeTemplate', {
+					id: this.templateDetail.id,
+					folderId: this.templateDetail.folderId,
+					key: 'generateName',
+					value: name
+				})
+				this.edtorState = 2
+			},
+			async changeLanguage (e) {
+				this.edtorState = 1
+				await this.$store.dispatch('changeTemplate', {
+					id: this.templateDetail.id,
+					folderId: this.templateDetail.folderId,
+					key: 'language',
+					value: e.key
+				})
+				this.edtorState = 2
+			}
 		},
 		components: {
 			baseHeader,
@@ -150,6 +211,7 @@
 		display flex
 		margin-top 10px
 		flex 1
+
 	.right_menu
 		position fixed
 		background #fff
@@ -157,6 +219,7 @@
 		border-radius 3px
 		z-index 999
 		display none
+
 	.template_detail_box
 		flex 1
 		overflow hidden
@@ -173,10 +236,11 @@
 		.editor_box
 			width 100%
 			flex 1
-		.button_box
-			padding 10px
+		.tip_box
+			height 20px
+			font-size 12px
 			box-sizing border-box
-			overflow hidden
-			button
-				float right
+			display flex
+			align-items center
+			padding-left 5px
 </style>

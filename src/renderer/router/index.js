@@ -16,6 +16,11 @@ export default new Router({
 			component: require('@/pages/template').default
 		},
 		{
+			path: '/filter',
+			name: 'filter',
+			component: require('@/pages/filter').default
+		},
+		{
 			path: '*',
 			redirect: '/'
 		}

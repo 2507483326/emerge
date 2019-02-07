@@ -51,7 +51,7 @@
 				}
 			},
 			showContextMenu ($event) {
-				this.$emit('showContextMenu', $event, this.model)
+				this.$bus.emit('showTemplateContextMenu', $event, this.model)
 			}
 		}
 	}
