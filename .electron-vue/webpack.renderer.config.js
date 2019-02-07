@@ -5,9 +5,9 @@ process.env.BABEL_ENV = 'renderer'
 const path = require('path')
 const {dependencies} = require('../package.json')
 const webpack = require('webpack')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {VueLoaderPlugin} = require('vue-loader')
@@ -32,23 +32,12 @@ let rendererConfig = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|vue)$/,
-				enforce: 'pre',
-				exclude: /node_modules/,
-				use: {
-					loader: 'eslint-loader',
-					options: {
-						formatter: require('eslint-friendly-formatter')
-					}
-				}
+				test: /\.stylus$/,
+				use: ['vue-style-loader', 'css-loader', 'stylus-loader']
 			},
 			{
 				test: /\.scss$/,
 				use: ['vue-style-loader', 'css-loader', 'sass-loader']
-			},
-			{
-				test: /\.stylus$/,
-				use: ['vue-style-loader', 'css-loader', 'stylus-loader']
 			},
 			{
 				test: /\.sass$/,
@@ -84,8 +73,7 @@ let rendererConfig = {
 						loaders: {
 							sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
 							scss: 'vue-style-loader!css-loader!sass-loader',
-							less: 'vue-style-loader!css-loader!less-loader',
-							stylus: 'vue-style-loader!css-loader!stylus-loader'
+							less: 'vue-style-loader!css-loader!less-loader'
 						}
 					}
 				}
@@ -146,13 +134,14 @@ let rendererConfig = {
 	output: {
 		filename: '[name].js',
 		libraryTarget: 'commonjs2',
-		chunkFilename: '[name].bundle.js',
 		path: path.join(__dirname, '../dist/electron')
 	},
 	resolve: {
 		alias: {
 			'@': path.join(__dirname, '../src/renderer'),
-			'vue$': 'vue/dist/vue.esm.js'
+			'vue$': 'vue/dist/vue.esm.js',
+			'./streams': 'iconv-lite/lib/streams.js',
+			'./extend-node': 'iconv-lite/lib/extend-node.js'
 		},
 		extensions: ['.js', '.vue', '.json', '.css', '.node']
 	},
