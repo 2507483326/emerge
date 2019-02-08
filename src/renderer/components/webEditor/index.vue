@@ -24,7 +24,8 @@
 			'model.language': {
 				handler: function (newVal, oldVal) {
 					if (newVal) {
-						console.log(this)
+						console.log('=============')
+						console.log(newVal)
 						this.changeLanguage(newVal)
 					}
 				},
@@ -32,8 +33,9 @@
 			}
 		},
 		mounted () {
-			console.log('mounted')
-			this.renderEditor()
+			if (this.model) {
+				this.renderEditor()
+			}
 			window.addEventListener('resize', this.resizeEditor)
 		},
 		destroyed () {
@@ -100,7 +102,6 @@
 		position relative
 		width 100%
 		height 100%
-		overflow hidden
 		.inner_box
 			position absolute
 			top 0

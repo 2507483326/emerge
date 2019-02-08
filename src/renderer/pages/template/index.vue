@@ -222,7 +222,6 @@
 
 	.template_detail_box
 		flex 1
-		overflow hidden
 		height 100%
 		display flex
 		height 100%

@@ -21,6 +21,11 @@ export default new Router({
 			component: require('@/pages/filter').default
 		},
 		{
+			path: '/generate',
+			name: 'generate',
+			component: require('@/pages/generate').default
+		},
+		{
 			path: '*',
 			redirect: '/'
 		}

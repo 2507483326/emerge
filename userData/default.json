@@ -1,5 +1,35 @@
 {
-  "dbList": [],
+  "dbList": [
+    {
+      "id": "71dac915-7a60-42c6-9b24-3d777707aa0f",
+      "dbId": null,
+      "folderId": null,
+      "children": [],
+      "name": "本地 (test)",
+      "isDbLibrary": true,
+      "isFolder": false,
+      "isConnect": false,
+      "path": null,
+      "connectConfig": {
+        "mysqlUrl": "jdbc:mysql://127.0.0.1:3306/",
+        "name": "本地",
+        "mysqlHost": "127.0.0.1",
+        "mysqlPort": "3306",
+        "mysqlDB": "test",
+        "mysqlUrlParam": "?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false",
+        "mysqlUser": "root",
+        "mysqlPassword": "111111"
+      }
+    }
+  ],
+  "filterList": [
+    {
+      "id": 0,
+      "name": "",
+      "value": "",
+      "isShow": false
+    }
+  ],
   "templateList": [
     {
       "id": "0ba35ec8-f2f4-484b-b489-595f51d85cb9",

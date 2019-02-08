@@ -13,6 +13,10 @@
 				<div class="iconfont icon-hanshu"></div>
 				<div class="content">过滤器</div>
 			</router-link>
+			<router-link tag="div" to="/generate" class="connect_box list_box">
+				<div class="iconfont icon-shengchanbaobei"></div>
+				<div class="content">代码生成</div>
+			</router-link>
 		</div>
 	</section>
 </template>

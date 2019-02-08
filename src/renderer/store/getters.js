@@ -10,7 +10,14 @@ const getters = {
 			return item
 		})
 		saveObj.dbList = saveDbList
-		saveObj.filterList = state.filter.filterList
+		saveObj.filterList = clone(state.filter.filterList).map(item => {
+			if (item.id == 0) {
+				item.name = ''
+				item.value = ''
+			}
+			item.isShow = false
+			return item
+		})
 		saveObj.templateList = state.template.templateList
 		return saveObj
 	},
@@ -34,6 +41,11 @@ const getters = {
 		})
 		return menuList
 	},
+	getDbById: state => id => {
+		return state.db.dbList.find(item => {
+			return item.id === id
+		})
+	},
 	tableDetail: state => data => {
 		let tableListVo = state.db.tableList.find(item => {
 			return item.id === data.dbId
@@ -49,6 +61,27 @@ const getters = {
 		return templateListVo.children.find(item => {
 			return item.id === data.id
 		})
+	},
+	filterList: state => clone(state.filter.filterList),
+	tableDbTree: state => {
+		let dbList = clone(state.db.dbList)
+		return dbList
+	},
+	tableTree: state => dbId => {
+		let resultList = []
+		let tableListVo = state.db.tableList.find(item => {
+			return item.id === dbId
+		})
+		if (!tableListVo) return []
+		for (let i = 0; i < tableListVo.tableList.length; i++) {
+			let item = tableListVo.tableList[i]
+			resultList.push(new DbMenu({
+				id: `dbId|${item.tableName}`,
+				name: item.tableName,
+				dbId: dbId
+			}))
+		}
+		return resultList
 	}
 }
 export default getters
