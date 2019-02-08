@@ -51,8 +51,12 @@ const getters = {
 			return item.id === data.dbId
 		})
 		return tableListVo.tableList.find(item => {
-			return item.id === data.id
+			return item.tableName === data.name
 		})
+	},
+	templateTree: state => {
+		let templateListVo = clone(state.template.templateList)
+		return templateListVo
 	},
 	templateDetail: state => data => {
 		let templateListVo = state.template.templateList.find(item => {
@@ -76,7 +80,7 @@ const getters = {
 		for (let i = 0; i < tableListVo.tableList.length; i++) {
 			let item = tableListVo.tableList[i]
 			resultList.push(new DbMenu({
-				id: `dbId|${item.tableName}`,
+				id: UUID.create().toString(),
 				name: item.tableName,
 				dbId: dbId
 			}))

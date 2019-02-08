@@ -32,6 +32,14 @@ let rendererConfig = {
 	module: {
 		rules: [
 			{
+				test: /\.art$/,
+				loader: "art-template-loader",
+				options: {
+					// art-template options (if necessary)
+					// @see https://github.com/aui/art-template
+				}
+			},
+			{
 				test: /\.stylus$/,
 				use: ['vue-style-loader', 'css-loader', 'stylus-loader']
 			},

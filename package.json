@@ -51,8 +51,9 @@
     }
   },
   "dependencies": {
-    "vue": "^2.5.16",
+    "art-template": "^4.13.2",
     "axios": "^0.18.0",
+    "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "ajv": "^6.5.0",
+    "art-template-loader": "^1.4.3",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-class-properties": "^6.24.1",

@@ -21,8 +21,9 @@
 
 <script>
 	import { noRepeat } from '@/annotation'
-	const { dialog } = require('electron').remote
+	import { selectPath } from '@/mixins'
 	export default {
+		mixins: [selectPath],
 		data () {
 			return {
 				templateData: {
@@ -64,19 +65,11 @@
 					this.loading = false
 				}
 			},
-			selectPath () {
-				console.log(this.isShowSelectPath)
+			async selectPath () {
 				if (this.isShowSelectPath) return
 				this.isShowSelectPath = true
-				dialog.showOpenDialog({
-					title: '选择模板文件夹',
-					properties: ['openDirectory']
-				}, (filePaths) => {
-					if (filePaths) {
-						this.templateData.path = filePaths[0]
-					}
-					this.isShowSelectPath = false
-				})
+				this.templateData.path = await this.selectDirectoryPath('选择模板文件夹')
+				this.isShowSelectPath = false
 			}
 		}
 	}

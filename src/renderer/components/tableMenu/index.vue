@@ -43,7 +43,8 @@
 		methods: {
 			async changeType () {
 				if (!this.model.isDbLibrary) {
-					this.$bus.emit('selectTable', {dbId: this.model.dbId, id: this.model.id})
+					console.log(this.model)
+					this.$bus.emit('selectTable', {dbId: this.model.dbId, name: this.model.name})
 					return
 				}
 				if (!this.isHasChildren && !this.model.isConnect) {
