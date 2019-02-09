@@ -24,6 +24,12 @@
   ],
   "filterList": [
     {
+      "id": "b694fce2-0faf-463d-abd0-18515fc99b6f",
+      "name": "test",
+      "value": "function () {}",
+      "isShow": false
+    },
+    {
       "id": 0,
       "name": "",
       "value": "",
@@ -42,7 +48,7 @@
           "name": "ggg",
           "isFolder": false,
           "path": "E:\\壁纸\\ggg.art",
-          "generateName": "test.vue",
+          "generateName": "${generateData.tableName}.vue",
           "language": "artHtml"
         }
       ],

@@ -17,6 +17,7 @@
 	import selectTableData from '@/components/selectTableData'
 	import generateConfig from '@/components/generateConfig'
 	import { genTemplateToFile } from '@/tools/generateArt'
+	import { mapGetters } from 'vuex'
 	export default {
 		data () {
 			return {
@@ -44,6 +45,11 @@
 				schedule: 0
 			}
 		},
+		computed: {
+			...mapGetters({
+				filterList: 'filterList'
+			})
+		},
 		methods: {
 			generateData (dataList) {
 				this.generateDataList = dataList
@@ -56,7 +62,7 @@
 			generateConfig (data) {
 				this.generateConfigObj = data
 				// this.schedule = 2
-				genTemplateToFile(this.generateDataList, this.generateConfigObj)
+				genTemplateToFile(this, this.generateDataList, this.generateConfigObj, this.filterList)
 			}
 		},
 		components: {

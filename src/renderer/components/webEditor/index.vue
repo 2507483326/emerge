@@ -76,7 +76,7 @@
 			async saveFile () {
 				this.$emit('changeState', 1)
 				console.log(this.monacoEditor.getValue())
-				await fs.writeFileSync(this.model.path, this.monacoEditor.getValue())
+				fs.writeFileSync(this.model.path, this.monacoEditor.getValue())
 				this.$emit('changeState', 2)
 			},
 			resizeEditor () {

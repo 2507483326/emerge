@@ -98,7 +98,7 @@
 				validationRules: {
 					rules: {
 						generateName: {
-							maxLen: 20,
+							maxLen: 100,
 							minLen: 1
 						}
 					},
