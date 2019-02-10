@@ -62,6 +62,7 @@
 		<section class="modal_box">
 			<new-template-folder ref="newTemplateFolder"></new-template-folder>
 			<new-template ref="newTemplate"></new-template>
+			<new-exists-template ref="newExistsTemplate"></new-exists-template>
 		</section>
 	</div>
 </template>
@@ -72,6 +73,7 @@
 	import contextMenu from '@/components/contextMenu'
 	import newTemplateFolder from '@/components/newTemplateFolder'
 	import newTemplate from '@/components/newTemplate'
+	import newExistsTemplate from '@/components/newExistsTemplate'
 	import webEditor from '@/components/webEditor'
 	import {mapState} from 'vuex'
 
@@ -129,11 +131,14 @@
 			})
 		},
 		created () {
+			document.addEventListener('drop', this.addExistsFile)
 			this.$bus.on('selectTemplate', this.selectTemplate)
 			this.$bus.on('showTemplateContextMenu', this.showContextMenu)
 		},
 		beforeDestroy () {
 			this.$bus.off('selectTemplate', this.selectTemplate)
+			this.$bus.off('showTemplateContextMenu', this.showContextMenu)
+			document.removeEventListener('drop', this.addExistsFile)
 		},
 		methods: {
 			showContextMenu ($event, model) {
@@ -192,6 +197,15 @@
 					value: e.key
 				})
 				this.edtorState = 2
+			},
+			addExistsFile (event) {
+				event.preventDefault()
+				event.stopPropagation()
+				if (event.dataTransfer.files > 1) {
+					this.$Message['warn']('请选择文件')
+					return
+				}
+				this.$refs.newExistsTemplate.show(event.dataTransfer.files[0])
 			}
 		},
 		components: {
@@ -200,6 +214,7 @@
 			contextMenu,
 			newTemplateFolder,
 			newTemplate,
+			newExistsTemplate,
 			webEditor
 		}
 	}

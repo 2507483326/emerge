@@ -19,7 +19,7 @@ export default {
 			kind: monaco.languages.CompletionItemKind.Function,
 			documentation: "arttemplate each循环",
 			insertText: '{{each ${1:params}}}\n' +
-				'    {{${2:key}}} {{${3:value}}}\n' +
+				'    {{$${2:key}}} {{$${3:value}}}\n' +
 				'{{/each}}',
 			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 		},

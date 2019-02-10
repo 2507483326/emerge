@@ -44,19 +44,20 @@
 	import contextMenu from '@/components/contextMenu'
 	import baseHeader from '@/components/baseHeader'
 	import newConnectModel from '@/components/newConnectModel'
-	import { mapGetters } from 'vuex'
+	import {mapGetters} from 'vuex'
+
 	export default {
 		data () {
 			return {
 				isRightMenuShow: false,
 				menuSelectModel: null,
 				columns: [
-					{ title: '列名', prop: 'columnName' },
-					{ title: '类型', prop: 'typeName' },
-					{ title: '长度', prop: 'columnSize' },
-					{ title: '不是null', prop: 'nullAble' },
-					{ title: '主键', prop: 'isPrimaryKey' },
-					{ title: '注释', prop: 'remarks' }
+					{title: '列名', prop: 'columnName'},
+					{title: '类型', prop: 'typeName'},
+					{title: '长度', prop: 'columnSize'},
+					{title: '不是null', prop: 'nullAble'},
+					{title: '主键', prop: 'isPrimaryKey'},
+					{title: '注释', prop: 'remarks'}
 				],
 				columnVoList: []
 			}
@@ -130,6 +131,7 @@
 			box-sizing border-box
 			padding 10px
 			overflow-y auto
+
 	.right_menu
 		position fixed
 		background #fff

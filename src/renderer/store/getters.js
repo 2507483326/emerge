@@ -54,9 +54,8 @@ const getters = {
 			return item.tableName === data.name
 		})
 	},
-	templateTree: state => {
-		let templateListVo = clone(state.template.templateList)
-		return templateListVo
+	templateList: state => {
+		return clone(state.template.templateList)
 	},
 	templateDetail: state => data => {
 		let templateListVo = state.template.templateList.find(item => {

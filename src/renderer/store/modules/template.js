@@ -56,14 +56,20 @@ const actions = {
 		}))
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	},
+	addExistsTemplate ({ dispatch }, data) {
+		let folder = state.templateList.find(item => {
+			return item.id === data.folderId
+		})
+		let filePath = `${folder.path}\\${data.name}.art`
+		fs.copy(data.file.path, filePath)
+		dispatch('addTemplate', data)
+	},
 	addTemplate ({ getters, state, commit }, data) {
 		let folder = state.templateList.find(item => {
 			return item.id === data.folderId
 		})
 		let filePath = `${folder.path}\\${data.name}.art`
-		console.log(filePath)
 		fs.ensureFileSync(filePath)
-		console.log(data)
 		commit('ADD_TEMPLATE', {
 			folderId: data.folderId,
 			data: new Template({

@@ -32,8 +32,7 @@
 				},
 				model: null,
 				isShow: false,
-				loading: false,
-				isShowSelectPath: false
+				loading: false
 			}
 		},
 		methods: {
@@ -57,24 +56,10 @@
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
-					this.$Message['error']('创建模板文件夹失败')
+					this.$Message['error']('创建模板文件失败')
 				} finally {
 					this.loading = false
 				}
-			},
-			selectPath () {
-				console.log(this.isShowSelectPath)
-				if (this.isShowSelectPath) return
-				this.isShowSelectPath = true
-				dialog.showOpenDialog({
-					title: '选择模板文件夹',
-					properties: ['openDirectory']
-				}, (filePaths) => {
-					if (filePaths) {
-						this.templateData.path = filePaths[0]
-					}
-					this.isShowSelectPath = false
-				})
 			}
 		}
 	}

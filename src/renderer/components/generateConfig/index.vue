@@ -41,7 +41,7 @@
 		},
 		computed: {
 			...mapGetters({
-				templateTree: 'templateTree'
+				templateTree: 'templateList'
 			})
 		},
 		methods: {

@@ -49,7 +49,6 @@
 				if (this.monacoEditor) {
 					this.monacoEditor.dispose()
 				}
-				console.log(this.model)
 				this.initEditor()
 				let content = this.readFile()
 				this.monacoEditor.setValue(content)
@@ -59,7 +58,6 @@
 				this.monacoEditor = monaco.editor.create(this.$refs.editor, {
 					language: this.model.language
 				})
-				console.log(this.monacoEditor)
 				this.monacoEditor.onDidChangeModelContent(this.changeContent)
 			},
 			readFile () {
@@ -75,7 +73,6 @@
 			},
 			async saveFile () {
 				this.$emit('changeState', 1)
-				console.log(this.monacoEditor.getValue())
 				fs.writeFileSync(this.model.path, this.monacoEditor.getValue())
 				this.$emit('changeState', 2)
 			},
@@ -85,7 +82,6 @@
 				}
 			},
 			changeContent () {
-				console.log('========')
 				this.saveFile()
 			},
 			changeLanguage () {

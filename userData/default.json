@@ -50,6 +50,16 @@
           "path": "E:\\壁纸\\ggg.art",
           "generateName": "${generateData.tableName}.vue",
           "language": "artHtml"
+        },
+        {
+          "id": "ae56f913-647b-4204-82d8-9ad02f834456",
+          "folderId": "0ba35ec8-f2f4-484b-b489-595f51d85cb9",
+          "children": [],
+          "name": "eva3",
+          "isFolder": false,
+          "path": "E:\\壁纸\\eva3.art",
+          "generateName": "",
+          "language": "artHtml"
         }
       ],
       "name": "壁纸",
