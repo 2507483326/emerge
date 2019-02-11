@@ -1,10 +1,12 @@
 <template>
-	<div class="select_data_box">
-		<SwitchList v-model="selectType" :datas="typeList"></SwitchList>
-		<div class="content" v-show="selectType === '数据库'">
+	<div class="select_data_box h-panel">
+		<div class="h-panel-bar">
+			<span class="h-panel-title">选择数据</span>
+			<SwitchList class="h-panel-right" v-model="selectType" :datas="typeList"></SwitchList>
+		</div>
+		<div class="content h-panel-body" v-show="selectType === '数据库'">
 			<Tree class="tree_box" :option="treeConfig" ref="tableTree" :multiple="true" v-model="selectTable" choose-mode="some"></Tree>
 		</div>
-		<Button color="primary" @click="nextStep">下一步</Button>
 	</div>
 </template>
 
@@ -52,14 +54,14 @@
 			})
 		},
 		methods: {
-			nextStep () {
+			generate () {
 				let selectTable = this.$refs.tableTree.getFullChoose().filter(item => {
 					return !item.isDbLibrary
 				})
 				selectTable = selectTable.map(item => {
 					return this.$store.getters.tableDetail(item)
 				})
-				this.$emit('generateData', selectTable)
+				return selectTable
 			}
 		}
 	}
@@ -68,11 +70,11 @@
 <style lang="stylus" scoped>
 	.select_data_box
 		display flex
-		height 100%
+		flex 1
 		flex-direction column
 		.content
-			padding 10px 0
-			flex 1
+			padding 10px
+			min-height 200px
 			overflow-y auto
 			box-sizing border-box
 			>>> .h-tree-ul

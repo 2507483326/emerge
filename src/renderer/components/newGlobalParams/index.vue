@@ -113,11 +113,13 @@
 			},
 			@noRepeat
 			async formHandler () {
+				this.loading = true
 				if (this.isAdd) {
 					await this.newFilter()
 				} else {
 					await this.updateFilter()
 				}
+				this.loading = false
 			},
 		}
 	}

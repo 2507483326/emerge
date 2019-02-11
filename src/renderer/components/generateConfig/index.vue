@@ -1,6 +1,9 @@
 <template>
-	<div class="generate_config_box">
-		<div class="content_box">
+	<div class="generate_config_box h-panel">
+		<div class="h-panel-bar">
+			<span class="h-panel-title">配置</span>
+		</div>
+		<div class="content_box h-panel-body">
 			<Form ref="form" :label-position="'left'" :label-width="100" :rules="validationRules" :model="generateConfigData">
 				<FormItem label="生成路径" prop="path">
 					<input type="text" placeholder="请输入路径名称" v-model="generateConfigData.path"/>
@@ -12,7 +15,6 @@
 				</FormItem>
 			</Form>
 		</div>
-		<Button color="primary" @click="nextStep">生成</Button>
 	</div>
 </template>
 
@@ -51,16 +53,16 @@
 				this.generateConfigData.path = await this.selectDirectoryPath('选择生成路径')
 				this.isShowSelectPath = false
 			},
-			nextStep () {
+			generate () {
 				let validResult = this.$refs.form.valid()
 				if (!validResult.result) return false
 				let templateList = this.$refs.templateTree.getFullChoose().filter(item => {
 					return !item.isFolder
 				})
-				this.$emit('generateConfig', {
+				return {
 					path: this.generateConfigData.path,
 					templateList
-				})
+				}
 			}
 		}
 	}
@@ -69,10 +71,10 @@
 <style lang="stylus" scoped>
 	.generate_config_box
 		display flex
-		height 100%
+		margin 10px 0
 		flex-direction column
 		.content_box
-			padding 10px 0
+			padding 10px
 			box-sizing border-box
 			flex 1
 			overflow-y auto
