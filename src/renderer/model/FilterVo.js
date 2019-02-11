@@ -3,11 +3,11 @@ export default class FilterVo {
 		id = 0,
 		name ='',
 		value = '',
-		isShow = false
+		type = 0
 	}) {
 		this.id = id
 		this.name = name
 		this.value = value
-		this.isShow = isShow
+		this.type = type
 	}
 }

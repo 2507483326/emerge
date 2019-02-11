@@ -3,10 +3,6 @@ import UUID from 'uuid-js'
 import fs from 'fs-extra'
 const state = {
 	filterList: [
-		new FilterVo({
-			name: '',
-			value: ''
-		})
 	]
 }
 
@@ -23,18 +19,13 @@ const mutations = {
 		})
 		originFilter.name = data.name
 		originFilter.value = data.value
+		originFilter.type = data.type
 		originFilter.isShow = data.isShow
 	},
 	DELETE_FILTER (state, id) {
 		state.filterList = state.filterList.filter(item => {
 			return item.id !== id
 		})
-	},
-	CHANGE_FILTER_SHOW (state, data) {
-		let originFilter = state.filterList.find(item => {
-			return item.id === data.id
-		})
-		originFilter.isShow = data.isShow
 	}
 }
 
@@ -42,6 +33,7 @@ const actions = {
 	addFilter ({ getters, commit }, data) {
 		commit('ADD_FILTER', new FilterVo({
 			id: UUID.create().toString(),
+			type: data.type,
 			name: data.name,
 			value: data.value
 		}))
@@ -50,6 +42,7 @@ const actions = {
 	updateFilter ({ getters, commit }, data) {
 		commit('UPDATE_FILTER', new FilterVo({
 			id: data.id,
+			type: data.type,
 			name: data.name,
 			value: data.value
 		}))
@@ -58,12 +51,6 @@ const actions = {
 	deleteFilter ({ getters, commit }, data) {
 		commit('DELETE_FILTER', data.id)
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	changeFilterShow ({ commit }, data) {
-		commit('CHANGE_FILTER_SHOW', new FilterVo({
-			id: data.id,
-			isShow: !data.isShow
-		}))
 	},
 	initFilter ({ commit }) {
 		try {

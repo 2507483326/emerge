@@ -152,6 +152,7 @@
 				this.isRightMenuShow = false
 			},
 			deleteTemplateFolder () {
+				this.isRightMenuShow = false
 				this.$Confirm("删除模板文件夹和下面所有的模板文件", "确定删除？").then(async () => {
 					try {
 						await this.$store.dispatch('deleteTemplateFolder', this.menuSelectModel.id)
@@ -162,12 +163,19 @@
 				})
 			},
 			createTemplate () {
-				this.$refs.newTemplate.show(this.menuSelectModel)
 				this.isRightMenuShow = false
+				this.$refs.newTemplate.show(this.menuSelectModel)
 			},
 			async deleteTemplate () {
 				this.edtorState = 1
-				await this.$store.dispatch('deleteTemplate', this.menuSelectModel.id)
+				this.isRightMenuShow = false
+				try {
+					await this.$store.dispatch('deleteTemplate', this.menuSelectModel.id)
+					this.$Message['success']('删除成功!')
+				} catch (e) {
+					console.error(e)
+					this.$Message['error']('删除失败!')
+				}
 				this.edtorState = 2
 			},
 			selectTemplate (data) {

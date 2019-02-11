@@ -96,7 +96,7 @@ const actions = {
 		commit('DELETE_TEMPLATE', id)
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	},
-	deleteTemplate ({ commit }, id) {
+	deleteTemplate ({ getters, commit }, id) {
 		commit('DELETE_TEMPLATE', id)
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	},

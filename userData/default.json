@@ -22,20 +22,7 @@
       }
     }
   ],
-  "filterList": [
-    {
-      "id": "b694fce2-0faf-463d-abd0-18515fc99b6f",
-      "name": "test",
-      "value": "function () {}",
-      "isShow": false
-    },
-    {
-      "id": 0,
-      "name": "",
-      "value": "",
-      "isShow": false
-    }
-  ],
+  "filterList": [],
   "templateList": [
     {
       "id": "0ba35ec8-f2f4-484b-b489-595f51d85cb9",

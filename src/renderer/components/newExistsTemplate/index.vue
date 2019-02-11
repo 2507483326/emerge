@@ -25,8 +25,10 @@
 
 <script>
 	import { noRepeat } from '@/annotation'
+	import { template } from '@/mixins'
 	import { mapGetters } from 'vuex'
 	export default {
+		mixins: [template],
 		data () {
 			return {
 				templateData: {
@@ -76,6 +78,10 @@
 				try {
 					let validResult = this.$refs.form.valid()
 					if (!validResult.result) return false
+					if (this.isHasTemplateName(this.templateData.name)) {
+						this.$Message['warn']('模板名称已存在')
+						return
+					}
 					this.$store.dispatch('addExistsTemplate', {
 						folderId: this.templateData.folderId,
 						name: this.templateData.name,
