@@ -1,5 +1,5 @@
 <template>
-	<div :style="style" style="display: block;" v-show="show"
+	<div class="context_menu_box" :style="style" style="display: block;" v-show="show"
 		 @mousedown.stop
 		 @contextmenu.prevent
 	>
@@ -70,3 +70,9 @@
 		}
 	}
 </script>
+
+<style lang="stylus" scoped>
+	.context_menu_box
+		padding 5px
+		font-size 12px
+</style>

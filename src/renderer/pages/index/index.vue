@@ -106,6 +106,7 @@
 			},
 			addDbLibrary () {
 				this.$refs.newConnectModel.show()
+				this.isRightMenuShow = false
 			}
 		},
 		components: {

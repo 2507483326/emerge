@@ -11,7 +11,7 @@
 			</router-link>
 			<router-link tag="div" to="/globalParams" class="connect_box list_box">
 				<div class="iconfont icon-hanshu"></div>
-				<div class="content">过滤器</div>
+				<div class="content">函数</div>
 			</router-link>
 			<router-link tag="div" to="/generate" class="connect_box list_box">
 				<div class="iconfont icon-shengchanbaobei"></div>

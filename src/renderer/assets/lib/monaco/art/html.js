@@ -65,7 +65,7 @@ export var language = {
 			[/(<)((?:[\w\-]+:)?[\w\-]+)/, ['delimiter', {token: 'tag', next: '@otherTag'}]],
 			[/(<\/)((?:[\w\-]+:)?[\w\-]+)/, ['delimiter', {token: 'tag', next: '@otherTag'}]],
 			[/</, 'delimiter'],
-			[/[^<]+/],
+			[/[^<]+/]
 		],
 		doctype: [
 			[/[^>]+/, 'metatag.content'],
