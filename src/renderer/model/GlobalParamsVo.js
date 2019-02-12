@@ -1,4 +1,4 @@
-export default class FilterVo {
+export default class GlobalParamsVo {
 	constructor ({
 		id = 0,
 		name ='',

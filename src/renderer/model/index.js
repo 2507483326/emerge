@@ -6,7 +6,7 @@ import SqlConnect from './SqlConnect'
 import Table from './Table'
 import TableVo from './TableVo'
 import Template from './Template'
-import FilterVo from './FilterVo'
+import GlobalParamsVo from './GlobalParamsVo'
 export {
 	Column,
 	DbMenu,
@@ -16,5 +16,5 @@ export {
 	Table,
 	TableVo,
 	Template,
-	FilterVo
+	GlobalParamsVo
 }

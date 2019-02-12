@@ -19,7 +19,7 @@
 		<div slot="footer" class="button_box">
 			<section class="button_box">
 				<Button @click="isShow = false">取消</Button>
-				<Button class="new_filter" color="primary" @click="formHandler">{{isAdd ? '新增' : '修改'}}
+				<Button class="new_global_params" color="primary" @click="formHandler">{{isAdd ? '新增' : '修改'}}
 				</Button>
 			</section>
 		</div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-	import { FilterVo } from '@/model'
+	import { GlobalParamsVo } from '@/model'
 	import UUID from 'uuid-js'
 	import {noRepeat} from '@/annotation'
 	export default {
@@ -73,7 +73,7 @@
 			show (data) {
 				this.isAdd = data.isAdd
 				if (this.isAdd) {
-					this.params = new FilterVo({
+					this.params = new GlobalParamsVo({
 						id: UUID.create().toString(),
 						type: 0,
 						name: '',
@@ -85,12 +85,12 @@
 				}
 				this.isShow = true
 			},
-			async newFilter () {
+			async newGlobalParams () {
 				let validResult = this.$refs.form.valid()
 				if (!validResult.result) return false
 				let typeName = this.getName(this.params.type)
 				try {
-					await this.$store.dispatch('addFilter', this.params)
+					await this.$store.dispatch('addGlobalParams', this.params)
 					this.$Message['success'](`创建${typeName}成功`)
 					this.isShow = false
 				} catch (e) {
@@ -98,12 +98,12 @@
 					this.$Message['error'](`创建${typeName}失败`)
 				}
 			},
-			async updateFilter () {
+			async updateGlobalParams () {
 				let validResult = this.$refs.form.valid()
 				if (!validResult.result) return false
 				let typeName = this.getName(this.params.type)
 				try {
-					this.$store.dispatch('updateFilter', this.params)
+					this.$store.dispatch('updateGlobalParams', this.params)
 					this.$Message['success'](`修改${typeName}成功`)
 					this.isShow = false
 				} catch (e) {
@@ -115,9 +115,9 @@
 			async formHandler () {
 				this.loading = true
 				if (this.isAdd) {
-					await this.newFilter()
+					await this.newGlobalParams()
 				} else {
-					await this.updateFilter()
+					await this.updateGlobalParams()
 				}
 				this.loading = false
 			},

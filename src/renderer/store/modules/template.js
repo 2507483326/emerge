@@ -1,9 +1,11 @@
 import UUID from 'uuid-js'
-import { FolderMenu, Template } from '@/model'
+import { FolderMenu, Template, GlobalParamsVo } from '@/model'
 import fs from 'fs-extra'
 import clone from 'clone'
 const state = {
-	templateList: []
+	templateList: [],
+	globalParamsList: [
+	]
 }
 
 const mutations = {
@@ -42,6 +44,26 @@ const mutations = {
 			return item.id !== id
 		})
 		state.templateList = templateList
+	},
+	ADD_GLOBAL_PARAMS (state, data) {
+		state.globalParamsList.unshift(data)
+	},
+	SET_GLOBAL_PARAMS (state, data) {
+		state.globalParamsList = data
+	},
+	UPDATE_GLOBAL_PARAMS (state, data) {
+		let originGlobalParams = state.globalParamsList.find(item => {
+			return item.id === data.id
+		})
+		originGlobalParams.name = data.name
+		originGlobalParams.value = data.value
+		originGlobalParams.type = data.type
+		originGlobalParams.isShow = data.isShow
+	},
+	DELETE_GLOBAL_PARAMS (state, id) {
+		state.globalParamsList = state.globalParamsList.filter(item => {
+			return item.id !== id
+		})
 	}
 }
 
@@ -103,6 +125,39 @@ const actions = {
 	changeTemplate ({ getters, commit }, data) {
 		commit('CHANGE_TEMPLATE', data)
 		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
+	addGlobalParams ({ getters, commit }, data) {
+		commit('ADD_GLOBAL_PARAMS', new GlobalParamsVo({
+			id: UUID.create().toString(),
+			type: data.type,
+			name: data.name,
+			value: data.value
+		}))
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
+	updateGlobalParams ({ getters, commit }, data) {
+		commit('UPDATE_GLOBAL_PARAMS', new GlobalParamsVo({
+			id: data.id,
+			type: data.type,
+			name: data.name,
+			value: data.value
+		}))
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
+	deleteGlobalParams ({ getters, commit }, data) {
+		commit('DELETE_GLOBAL_PARAMS', data.id)
+		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	},
+	initGlobalParams ({ commit }) {
+		try {
+			fs.ensureFileSync('./userData/default.json')
+			let oldData = fs.readJsonSync('./userData/default.json')
+			if (oldData && oldData.globalParamsList) {
+				commit('SET_GLOBAL_PARAMS', oldData.globalParamsList)
+			}
+		} catch (e) {
+			console.warn('default.json解析失败')
+		}
 	}
 }
 

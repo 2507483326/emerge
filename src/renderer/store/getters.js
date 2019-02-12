@@ -10,7 +10,7 @@ const getters = {
 			return item
 		})
 		saveObj.dbList = saveDbList
-		saveObj.filterList = clone(state.filter.filterList).map(item => {
+		saveObj.globalParamsList = clone(state.template.globalParamsList).map(item => {
 			if (item.id == 0) {
 				item.name = ''
 				item.value = ''
@@ -65,7 +65,7 @@ const getters = {
 			return item.id === data.id
 		})
 	},
-	filterList: state => clone(state.filter.filterList),
+	globalParamsList: state => clone(state.template.globalParamsList),
 	tableDbTree: state => {
 		let dbList = clone(state.db.dbList)
 		return dbList

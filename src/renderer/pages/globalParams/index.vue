@@ -5,17 +5,17 @@
 		<!--内容-->
 		<div class="content_box">
 			<header class="header_box">
-				<Button color="primary" @click="newFilter">新增函数</Button>
+				<Button color="primary" @click="newGlobalParams">新增函数</Button>
 			</header>
 			<div class="show_list_box">
-				<div class="list_box" :key="item.id" v-for="(item, index) in filterList">
+				<div class="list_box" :key="item.id" v-for="(item, index) in globalParamsList">
 					<div class="message_box">
 						<div class="name">{{item.name}}</div>
 						<div class="type h-tag">{{getName(item.type)}}</div>
 					</div>
 					<div class="button_box">
-						<Button class="button_list" color="primary" @click="updateFilter(index)">修改</Button>
-						<Button class="button_list" color="red" @click="deleteFilter(index)">删除</Button>
+						<Button class="button_list" color="primary" @click="updateGlobalParams(index)">修改</Button>
+						<Button class="button_list" color="red" @click="deleteGlobalParams(index)">删除</Button>
 					</div>
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 		},
 		computed: {
 			...mapGetters({
-				filterList: 'filterList'
+				globalParamsList: 'globalParamsList'
 			})
 		},
 		methods: {
@@ -67,24 +67,24 @@
 				return this.typeList.find(item => item.key === type).title
 			},
 			@noRepeat
-			async newFilter () {
+			async newGlobalParams () {
 				this.$refs.newGlobalParams.show({
 					isAdd: true
 				})
 			},
 			@noRepeat
-			async updateFilter (index) {
+			async updateGlobalParams (index) {
 				this.$refs.newGlobalParams.show({
 					isAdd: false,
-					params: this.filterList[index]
+					params: this.globalParamsList[index]
 				})
 			},
 			@noRepeat
-			async deleteFilter (index) {
-				let typeName = this.getName(this.filterList[index].type)
-				this.$Confirm("删除数据库", "确定删除？").then(async () => {
+			async deleteGlobalParams (index) {
+				let typeName = this.getName(this.globalParamsList[index].type)
+				this.$Confirm(`删除${typeName}`, "确定删除？").then(async () => {
 					try {
-						await this.$store.dispatch('deleteFilter', this.filterList[index])
+						await this.$store.dispatch('deleteGlobalParams', this.globalParamsList[index])
 						this.$Message['success'](`删除${typeName}成功`)
 					} catch (e) {
 						console.log(e)
@@ -137,12 +137,6 @@
 					display flex
 					.button_list
 						margin-left 10px
-		.filter_item
-			margin 10px
-		.new_filter
-			display block
-			width 100%
-			margin-top 30px
 		.show_icon
 			cursor pointer
 

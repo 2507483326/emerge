@@ -9,7 +9,7 @@
 				<div class="iconfont icon-moban"></div>
 				<div class="content">模板</div>
 			</router-link>
-			<router-link tag="div" to="/filter" class="connect_box list_box">
+			<router-link tag="div" to="/globalParams" class="connect_box list_box">
 				<div class="iconfont icon-hanshu"></div>
 				<div class="content">过滤器</div>
 			</router-link>

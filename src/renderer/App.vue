@@ -12,7 +12,7 @@
 			init () {
 				this.$store.dispatch('initDb')
 				this.$store.dispatch('initTemplate')
-				this.$store.dispatch('initFilter')
+				this.$store.dispatch('initGlobalParams')
 				document.addEventListener('dragover', function (e) {
 					e.preventDefault()
 					e.stopPropagation()

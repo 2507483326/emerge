@@ -16,9 +16,9 @@ export default new Router({
 			component: require('@/pages/template').default
 		},
 		{
-			path: '/filter',
-			name: 'filter',
-			component: require('@/pages/filter').default
+			path: '/globalParams',
+			name: 'globalParams',
+			component: require('@/pages/globalParams').default
 		},
 		{
 			path: '/generate',

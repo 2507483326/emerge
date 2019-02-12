@@ -53,6 +53,7 @@
   "dependencies": {
     "art-template": "^4.13.2",
     "axios": "^0.18.0",
+    "jsoneditor": "^5.28.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",

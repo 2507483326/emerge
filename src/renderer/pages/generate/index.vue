@@ -46,7 +46,7 @@
 		},
 		computed: {
 			...mapGetters({
-				filterList: 'filterList'
+				globalParamsList: 'globalParamsList'
 			})
 		},
 		methods: {
@@ -60,7 +60,7 @@
 					return
 				}
 				this.generateConfigObj = this.$refs.generateConfig.generate()
-				genTemplateToFile(this, this.generateDataList, this.generateConfigObj, this.filterList)
+				genTemplateToFile(this, this.generateDataList, this.generateConfigObj, this.globalParamsList)
 				this.$Message['success']('生成代码成功')
 				this.loading = false
 			}
