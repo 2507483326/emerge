@@ -79,18 +79,19 @@
 					let validResult = this.$refs.form.valid()
 					if (!validResult.result) return false
 					if (this.isHasTemplateName(this.templateData.name)) {
-						this.$Message['warn']('模板名称已存在')
+						this.$Message['warn']('模板名称已存在!')
 						return
 					}
-					this.$store.dispatch('addExistsTemplate', {
+					await this.$store.dispatch('addExistsTemplate', {
 						folderId: this.templateData.folderId,
 						name: this.templateData.name,
 						file: this.file
 					})
+					this.$Message['error']('导入模板文件成功!')
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
-					this.$Message['error']('创建模板文件夹失败')
+					this.$Message['error']('导入模板文件失败!')
 				} finally {
 					this.loading = false
 				}

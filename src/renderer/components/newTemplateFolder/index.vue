@@ -56,11 +56,11 @@
 						name: folderName,
 						path: this.templateData.path
 					})
-					this.$Message['success']('创建模板文件夹成功')
+					this.$Message['success']('创建模板文件夹成功!')
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
-					this.$Message['error']('创建模板文件夹失败')
+					this.$Message['error']('创建模板文件夹失败!')
 				} finally {
 					this.loading = false
 				}

@@ -86,9 +86,9 @@
 					this.sqlConnect.groupMysqlUrl()
 					console.log(this.sqlConnect)
 					await jarTool.exec(cmd.TEST_DB_CONNECT, this.sqlConnect)
-					this.$Message['success']('数据库连接成功')
+					this.$Message['success']('数据库连接成功!')
 				} catch (e) {
-					this.$Message['error']('数据库连接失败')
+					this.$Message['error']('数据库连接失败!')
 					console.error(e)
 				} finally {
 					this.loading = false
@@ -99,14 +99,17 @@
 				try {
 					let validResult = this.$refs.form.valid()
 					if (!validResult.result) return
+					this.loading = true
 					this.addAllTip()
 					this.sqlConnect.groupMysqlUrl()
 					await this.$store.dispatch('addDb', this.sqlConnect)
-					this.$Message['success']('新建连接成功')
+					this.$Message['success']('新建连接成功!')
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
-					this.$Message['error']('新建连接失败')
+					this.$Message['error']('新建连接失败!')
+				} finally {
+					this.loading = false
 				}
 			},
 			show () {

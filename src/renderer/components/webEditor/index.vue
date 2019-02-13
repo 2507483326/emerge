@@ -69,7 +69,7 @@
 					return result
 				} catch (e) {
 					console.error(e)
-					this.$Message['error']('获取文件失败')
+					this.$Message['error']('获取文件失败!')
 					return null
 				}
 			},

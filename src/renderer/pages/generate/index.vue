@@ -24,23 +24,8 @@
 	export default {
 		data () {
 			return {
-				scheduleMessage: [
-					{
-						key: 'a',
-						title: '数据',
-						icon: 'h-icon-task',
-						component: 'select-generate-data'
-					},
-					{
-						key: 'b',
-						title: '配置',
-						icon: 'h-icon-setting',
-						component: 'generate-config'
-					}
-				],
 				generateDataList: [],
 				generateConfigObj: null,
-				schedule: 0,
 				loading: false
 			}
 		},
@@ -51,17 +36,22 @@
 		},
 		methods: {
 			@noRepeat
-			generate () {
+			async generate () {
 				this.loading = true
-				this.generateDataList = this.$refs.selectGenerateData.generate()
-				if (!this.generateDataList || this.generateDataList.length === 0) {
-					this.$Message['warn']('请选择需要生成的数据')
-					this.loading = false
-					return
+				try {
+					this.generateDataList = this.$refs.selectGenerateData.generate()
+					if (!this.generateDataList || this.generateDataList.length === 0) {
+						this.$Message['warn']('请选择需要生成的数据')
+						this.loading = false
+						return
+					}
+					this.generateConfigObj = this.$refs.generateConfig.generate()
+					genTemplateToFile(this, this.generateDataList, this.generateConfigObj, this.globalParamsList)
+					this.$Message['success']('生成代码成功!')
+				} catch (e) {
+					console.error(e)
+					this.$Message['error']('生成代码失败!')
 				}
-				this.generateConfigObj = this.$refs.generateConfig.generate()
-				genTemplateToFile(this, this.generateDataList, this.generateConfigObj, this.globalParamsList)
-				this.$Message['success']('生成代码成功')
 				this.loading = false
 			}
 		},

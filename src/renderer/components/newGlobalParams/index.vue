@@ -30,22 +30,14 @@
 	import { GlobalParamsVo } from '@/model'
 	import UUID from 'uuid-js'
 	import {noRepeat} from '@/annotation'
+	import { $const } from '@/common'
 	export default {
 		data () {
 			return {
 				isShow: false,
 				isAdd: true,
 				loading: false,
-				typeList: [{
-					key: 0,
-					title: '过滤器'
-				}, {
-					key: 1,
-					title: '变量'
-				}, {
-					key: 2,
-					title: '方法'
-				}],
+				typeList: $const['PARAMS/TYPE'],
 				params: {
 					type: 0,
 					name: '',
@@ -91,11 +83,11 @@
 				let typeName = this.getName(this.params.type)
 				try {
 					await this.$store.dispatch('addGlobalParams', this.params)
-					this.$Message['success'](`创建${typeName}成功`)
+					this.$Message['success'](`创建${typeName}成功!`)
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
-					this.$Message['error'](`创建${typeName}失败`)
+					this.$Message['error'](`创建${typeName}失败!`)
 				}
 			},
 			async updateGlobalParams () {
@@ -103,12 +95,12 @@
 				if (!validResult.result) return false
 				let typeName = this.getName(this.params.type)
 				try {
-					this.$store.dispatch('updateGlobalParams', this.params)
-					this.$Message['success'](`修改${typeName}成功`)
+					await this.$store.dispatch('updateGlobalParams', this.params)
+					this.$Message['success'](`修改${typeName}成功!`)
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
-					this.$Message['error'](`修改${typeName}失败`)
+					this.$Message['error'](`修改${typeName}失败!`)
 				}
 			},
 			@noRepeat

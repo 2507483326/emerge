@@ -13,7 +13,7 @@ export default [
 		]
 	},
 	{
-		name: 'editor_state',
+		name: 'EDITOR_STATE',
 		value: {
 			'default': 0,
 			'save': 1,

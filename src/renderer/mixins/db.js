@@ -10,7 +10,7 @@ export default {
 				await this.fetchDbInfo(this.model)
 			} catch (e) {
 				console.error(e)
-				this.$Message['error']('获取数据库信息失败')
+				this.$Message['error']('获取数据库信息失败!')
 			} finally {
 				this.isConnect = false
 			}

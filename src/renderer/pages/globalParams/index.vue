@@ -29,19 +29,11 @@
 	import {mapGetters} from 'vuex'
 	import {noRepeat} from '@/annotation'
 	import newGlobalParams from '@/components/newGlobalParams'
+	import { $const } from '@/common'
 	export default {
 		data () {
 			return {
-				typeList: [{
-					key: 0,
-					title: '过滤器'
-				}, {
-					key: 1,
-					title: '变量'
-				}, {
-					key: 2,
-					title: '方法'
-				}],
+				typeList: $const['PARAMS/TYPE'],
 				validationRules: {
 					rules: {
 						name: {
@@ -67,28 +59,28 @@
 				return this.typeList.find(item => item.key === type).title
 			},
 			@noRepeat
-			async newGlobalParams () {
+			newGlobalParams () {
 				this.$refs.newGlobalParams.show({
 					isAdd: true
 				})
 			},
 			@noRepeat
-			async updateGlobalParams (index) {
+			updateGlobalParams (index) {
 				this.$refs.newGlobalParams.show({
 					isAdd: false,
 					params: this.globalParamsList[index]
 				})
 			},
 			@noRepeat
-			async deleteGlobalParams (index) {
+			deleteGlobalParams (index) {
 				let typeName = this.getName(this.globalParamsList[index].type)
 				this.$Confirm(`删除${typeName}`, "确定删除？").then(async () => {
 					try {
 						await this.$store.dispatch('deleteGlobalParams', this.globalParamsList[index])
-						this.$Message['success'](`删除${typeName}成功`)
+						this.$Message['success'](`删除${typeName}成功!`)
 					} catch (e) {
-						console.log(e)
-						this.$Message['error'](`删除${typeName}失败`)
+						console.error(e)
+						this.$Message['error'](`删除${typeName}失败!`)
 					}
 				})
 			}

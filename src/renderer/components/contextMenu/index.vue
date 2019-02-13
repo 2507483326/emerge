@@ -12,12 +12,10 @@
 		name: 'context-menu',
 		data () {
 			return {
-				triggerShowFn: () => {},
 				triggerHideFn: () => {},
 				x: null,
 				y: null,
-				style: {},
-				binded: false
+				style: {}
 			}
 		},
 		props: {
@@ -47,7 +45,7 @@
 			},
 
 			// 鼠标按压事件处理器
-			clickDocumentHandler (e) {
+			clickDocumentHandler () {
 				this.$emit('update:show', false)
 			},
 
