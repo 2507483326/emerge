@@ -33,11 +33,11 @@
 				</Form>
 				<div class="editor_box">
 					<web-editor ref="editor" :model="templateDetail"
-								@changeState="(state) => edtorState = state"></web-editor>
+								@changeState="(state) => editorState = state"></web-editor>
 				</div>
 				<div class="tip_box">
-					<div v-show="edtorState === 1">保存中...</div>
-					<div v-show="edtorState === 2">已保存</div>
+					<div v-show="editorState === 1">保存中...</div>
+					<div v-show="editorState === 2">已保存</div>
 				</div>
 			</section>
 			<section class="template_detail_box" v-show="!templateDetail"></section>
@@ -76,23 +76,14 @@
 	import newExistsTemplate from '@/components/newExistsTemplate'
 	import webEditor from '@/components/webEditor'
 	import {mapState} from 'vuex'
-
+	import { $const } from '@/common'
 	export default {
 		data () {
 			return {
 				isRightMenuShow: false,
 				menuSelectModel: null,
 				templateDetail: null,
-				languageList: [
-					{
-						title: 'html',
-						key: 'artHtml'
-					},
-					{
-						title: 'java',
-						key: 'artJava'
-					}
-				],
+				languageList: $const['TEMPLATE/LANGUAGE'],
 				templateData: {
 					generateName: null,
 					language: 'artHtml'
@@ -106,15 +97,15 @@
 					},
 					required: ['generateName', 'language']
 				},
-				edtorState: 0
+				editorState: $const['TEMPLATE/EDITOR_STATE'].default
 			}
 		},
 		watch: {
-			edtorState (newVal) {
-				if (newVal === 2) {
+			editorState (newVal) {
+				if (newVal === $const['TEMPLATE/EDITOR_STATE'].complete) {
 					clearTimeout(this.stateTimeout)
 					this.stateTimeout = setTimeout(() => {
-						this.edtorState = 0
+						this.editorState = $const['TEMPLATE/EDITOR_STATE'].default
 					}, 500)
 				}
 			},
@@ -136,29 +127,29 @@
 			this.$bus.on('showTemplateContextMenu', this.showContextMenu)
 		},
 		beforeDestroy () {
+			document.removeEventListener('drop', this.addExistsFile)
 			this.$bus.off('selectTemplate', this.selectTemplate)
 			this.$bus.off('showTemplateContextMenu', this.showContextMenu)
-			document.removeEventListener('drop', this.addExistsFile)
 		},
 		methods: {
 			showContextMenu ($event, model) {
-				console.log('[][][][][][]')
 				this.menuSelectModel = model
 				this.$refs.contextMenu.contextMenuHandler($event)
 				this.isRightMenuShow = true
 			},
 			addTemplateFolder () {
-				this.$refs.newTemplateFolder.show()
 				this.isRightMenuShow = false
+				this.$refs.newTemplateFolder.show()
 			},
 			deleteTemplateFolder () {
 				this.isRightMenuShow = false
-				this.$Confirm("删除模板文件夹和下面所有的模板文件", "确定删除？").then(async () => {
+				this.$Confirm("删除模板文件夹和模板文件", "确定删除？").then(async () => {
 					try {
 						await this.$store.dispatch('deleteTemplateFolder', this.menuSelectModel.id)
 						this.$Message['success']('删除成功!')
 					} catch (e) {
-						this.$Message['error']('删除失败')
+						console.error(e)
+						this.$Message['error']('删除失败!')
 					}
 				})
 			},
@@ -167,7 +158,7 @@
 				this.$refs.newTemplate.show(this.menuSelectModel)
 			},
 			async deleteTemplate () {
-				this.edtorState = 1
+				this.editorState = $const['TEMPLATE/EDITOR_STATE'].save
 				this.isRightMenuShow = false
 				try {
 					await this.$store.dispatch('deleteTemplate', this.menuSelectModel.id)
@@ -176,7 +167,7 @@
 					console.error(e)
 					this.$Message['error']('删除失败!')
 				}
-				this.edtorState = 2
+				this.editorState = $const['TEMPLATE/EDITOR_STATE'].complete
 			},
 			selectTemplate (data) {
 				this.templateDetail = this.$store.getters.templateDetail(data)
@@ -187,33 +178,48 @@
 				})
 			},
 			async changeGenerateName (name) {
-				this.edtorState = 1
-				await this.$store.dispatch('changeTemplate', {
-					id: this.templateDetail.id,
-					folderId: this.templateDetail.folderId,
-					key: 'generateName',
-					value: name
-				})
-				this.edtorState = 2
+				this.editorState = $const['TEMPLATE/EDITOR_STATE'].save
+				try {
+					await this.$store.dispatch('changeTemplate', {
+						id: this.templateDetail.id,
+						folderId: this.templateDetail.folderId,
+						key: 'generateName',
+						value: name
+					})
+				} catch (e) {
+					console.error(e)
+					this.$Message['error']('修改模板名称失败!')
+				}
+				this.editorState = $const['TEMPLATE/EDITOR_STATE'].complete
 			},
 			async changeLanguage (e) {
-				this.edtorState = 1
-				await this.$store.dispatch('changeTemplate', {
-					id: this.templateDetail.id,
-					folderId: this.templateDetail.folderId,
-					key: 'language',
-					value: e.key
-				})
-				this.edtorState = 2
+				this.editorState = $const['TEMPLATE/EDITOR_STATE'].save
+				try {
+					await this.$store.dispatch('changeTemplate', {
+						id: this.templateDetail.id,
+						folderId: this.templateDetail.folderId,
+						key: 'language',
+						value: e.key
+					})
+				} catch (e) {
+					console.error(e)
+					this.$Message['error']('修改模板语言失败!')
+				}
+				this.editorState = $const['TEMPLATE/EDITOR_STATE'].complete
 			},
 			addExistsFile (event) {
 				event.preventDefault()
 				event.stopPropagation()
-				if (event.dataTransfer.files > 1) {
-					this.$Message['warn']('请选择文件')
+				let file = event.dataTransfer.files[0]
+				if (file == null) {
+					this.$Message['warn']('请选择文件!')
 					return
 				}
-				this.$refs.newExistsTemplate.show(event.dataTransfer.files[0])
+				if (!this.templateList || this.templateList.length === 0) {
+					this.$Message['warn']('请先新建模板文件夹!')
+					return
+				}
+				this.$refs.newExistsTemplate.show(file)
 			}
 		},
 		components: {

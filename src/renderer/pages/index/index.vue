@@ -45,20 +45,13 @@
 	import baseHeader from '@/components/baseHeader'
 	import newConnectModel from '@/components/newConnectModel'
 	import {mapGetters} from 'vuex'
-
+	import { $const } from '@/common'
 	export default {
 		data () {
 			return {
 				isRightMenuShow: false,
 				menuSelectModel: null,
-				columns: [
-					{title: '列名', prop: 'columnName'},
-					{title: '类型', prop: 'typeName'},
-					{title: '长度', prop: 'columnSize'},
-					{title: '不是null', prop: 'nullAble'},
-					{title: '主键', prop: 'isPrimaryKey'},
-					{title: '注释', prop: 'remarks'}
-				],
+				columns: $const['TABLE/COLUMN'],
 				columnVoList: []
 			}
 		},
@@ -75,14 +68,14 @@
 		},
 		methods: {
 			refresh () {
+				this.isRightMenuShow = false
 				this.$refs.tableMenu.forEach(item => {
 					item.refreshDb(this.menuSelectModel.id)
 				})
-				this.isRightMenuShow = false
 			},
 			close () {
-				this.$store.dispatch('closeConnect', this.menuSelectModel.id)
 				this.isRightMenuShow = false
+				this.$store.dispatch('closeConnect', this.menuSelectModel.id)
 			},
 			deleteDb () {
 				this.isRightMenuShow = false
@@ -91,22 +84,23 @@
 						await this.$store.dispatch('deleteDb', this.menuSelectModel.id)
 						this.$Message['success']('删除成功！')
 					} catch (e) {
-						this.$Message['error']('删除失败')
+						console.error(e)
+						this.$Message['error']('删除失败！')
 					}
 				})
 			},
 			showContextMenu ($event, model) {
+				this.isRightMenuShow = true
 				this.menuSelectModel = model
 				this.$refs.contextMenu.contextMenuHandler($event)
-				this.isRightMenuShow = true
 			},
 			selectTable (data) {
 				let tableVo = this.$store.getters.tableDetail(data)
 				this.columnVoList = tableVo.columnVoList
 			},
 			addDbLibrary () {
-				this.$refs.newConnectModel.show()
 				this.isRightMenuShow = false
+				this.$refs.newConnectModel.show()
 			}
 		},
 		components: {
