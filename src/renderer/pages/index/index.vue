@@ -96,6 +96,7 @@
 			},
 			selectTable (data) {
 				let tableVo = this.$store.getters.tableDetail(data)
+				console.log(tableVo.columnVoList)
 				this.columnVoList = tableVo.columnVoList
 			},
 			addDbLibrary () {

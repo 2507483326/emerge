@@ -64,6 +64,13 @@
 			<new-template ref="newTemplate"></new-template>
 			<new-exists-template ref="newExistsTemplate"></new-exists-template>
 		</section>
+		<!--drag提示-->
+		<section class="drag_tip_box" v-show="isDragFile">
+			<div class="content_box">
+				<div class="iconfont icon-xiazai"></div>
+				<div class="tip">放置文件，增加模板</div>
+			</div>
+		</section>
 	</div>
 </template>
 
@@ -81,6 +88,7 @@
 		data () {
 			return {
 				isRightMenuShow: false,
+				isDragFile: false,
 				menuSelectModel: null,
 				templateDetail: null,
 				languageList: $const['TEMPLATE/LANGUAGE'],
@@ -123,11 +131,15 @@
 		},
 		created () {
 			document.addEventListener('drop', this.addExistsFile)
+			document.addEventListener('dragenter', this.dragEnter)
+			document.addEventListener('dragleave', this.dragLeave)
 			this.$bus.on('selectTemplate', this.selectTemplate)
 			this.$bus.on('showTemplateContextMenu', this.showContextMenu)
 		},
 		beforeDestroy () {
 			document.removeEventListener('drop', this.addExistsFile)
+			document.removeEventListener('dragenter', this.dragEnter)
+			document.removeEventListener('dragleave', this.dragLeave)
 			this.$bus.off('selectTemplate', this.selectTemplate)
 			this.$bus.off('showTemplateContextMenu', this.showContextMenu)
 		},
@@ -210,6 +222,7 @@
 			addExistsFile (event) {
 				event.preventDefault()
 				event.stopPropagation()
+				this.isDragFile = false
 				let file = event.dataTransfer.files[0]
 				if (file == null) {
 					this.$Message['warn']('请选择文件!')
@@ -220,6 +233,18 @@
 					return
 				}
 				this.$refs.newExistsTemplate.show(file)
+			},
+			dragEnter (event) {
+				event.preventDefault()
+				event.stopPropagation()
+				this.isDragFile = true
+			},
+			dragLeave (event) {
+				event.preventDefault()
+				event.stopPropagation()
+				if (event.x === 0 && event.y === 0) {
+					this.isDragFile = false
+				}
 			}
 		},
 		components: {
@@ -240,7 +265,6 @@
 		display flex
 		margin-top 10px
 		flex 1
-
 	.right_menu
 		position fixed
 		background #fff
@@ -271,4 +295,28 @@
 			display flex
 			align-items center
 			padding-left 5px
+	.drag_tip_box
+		position fixed
+		left 0
+		right 0
+		top 0
+		bottom 0
+		background rgba(0, 0, 0, .3)
+		.content_box
+			width 400px
+			height 150px
+			border .2rem dashed #fff
+			border-radius 10px
+			position absolute
+			top 50%
+			left 50%
+			transform translate(-50%, -50%)
+			text-align center
+			color #fff
+			display flex
+			flex-direction column
+			align-items center
+			justify-content center
+			.iconfont
+				font-size 50px
 </style>

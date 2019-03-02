@@ -12,18 +12,20 @@ export default class Column {
 		this.columnSize = columnSize
 		this.decimalDigits = decimalDigits
 		this.numPrecRadix = numPrecRadix
-		this.nullAble = nullAble
+		this.nullAble = nullAble === 1 || isPrimaryKey
 		this.remarks = remarks
 		this.columnDef = columnDef
 		this.charOctetLength = charOctetLength
 		this.ordinalPosition = ordinalPosition
-		this.isNullable = isNullable
+		this.isNullable = isNullable === 1 || isPrimaryKey
 		this.scourceDataType = scourceDataType
-		this.isAutoIncrement = isAutoIncrement
+		// 是否自动递增
+		this.isAutoIncrement = isAutoIncrement !== 'NO'
 		this.columnName = columnName
 		this.lowerCaseUnderLineColumnName = lowerCaseUnderLineColumnName
 		this.upperCaseUnderLineColumnName = upperCaseUnderLineColumnName
 		this.camelColumnName = camelColumnName
+		// java 数据类型
 		this.javaType = javaType
 		this.oracleType = oracleType
 		this.mysqlType = mysqlType
@@ -31,4 +33,5 @@ export default class Column {
 		this.pgsqlType = pgsqlType
 		this.isPrimaryKey = isPrimaryKey
 	}
+
 }

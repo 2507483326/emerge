@@ -15,5 +15,8 @@ export default class SqlConnect {
 	// 组装URL
 	groupMysqlUrl () {
 		this.mysqlUrl = `jdbc:mysql://${this.mysqlHost}:${this.mysqlPort}/`
+		if (this.mysqlUrlParam == null || this.mysqlUrlParam === "") {
+			this.mysqlUrlParam = "?useUnicode=true&characterEncoding=UTF-8"
+		}
 	}
 }
