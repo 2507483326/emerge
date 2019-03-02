@@ -9,10 +9,11 @@
 			this.init()
 		},
 		methods: {
-			init () {
-				this.$store.dispatch('initDb')
-				this.$store.dispatch('initTemplate')
-				this.$store.dispatch('initGlobalParams')
+			async init () {
+				console.log('init')
+				await this.$store.dispatch('initDb')
+				await this.$store.dispatch('initTemplate')
+				await this.$store.dispatch('initGlobalParams')
 			}
 		}
 	}
@@ -40,4 +41,10 @@
 		word-break break-all
 	.no_auto_width
 		resize none
+	.no_data_tip_box
+		padding 0 10px
+		color #999999
+		z-index -1
+		user-select none
+		cursor default
 </style>

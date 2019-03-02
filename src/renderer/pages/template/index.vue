@@ -12,6 +12,7 @@
 						:model="item"
 						:key="item.id" v-for="item in templateList"></template-menu>
 				</div>
+				<div class="no_data_tip_box" v-show="templateList.length === 0" @contextmenu.prevent.self.stop="showContextMenu">无模板文件夹</div>
 			</section>
 			<!--模板详细-->
 			<section class="template_detail_box" v-show="templateDetail">
@@ -82,7 +83,7 @@
 	import newTemplate from '@/components/newTemplate'
 	import newExistsTemplate from '@/components/newExistsTemplate'
 	import webEditor from '@/components/webEditor'
-	import {mapState} from 'vuex'
+	import {mapGetters} from 'vuex'
 	import { $const } from '@/common'
 	export default {
 		data () {
@@ -125,8 +126,8 @@
 			}
 		},
 		computed: {
-			...mapState({
-				templateList: state => state.template.templateList
+			...mapGetters({
+				templateList: 'templateList'
 			})
 		},
 		created () {

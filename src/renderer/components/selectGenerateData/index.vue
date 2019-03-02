@@ -5,6 +5,7 @@
 			<SwitchList class="h-panel-right" v-model="selectType" :datas="typeList"></SwitchList>
 		</div>
 		<div class="content h-panel-body" v-show="selectType === '数据库'">
+			<div class="no_data_tip_box" v-show="!selectTable">请新建数据库连接</div>
 			<Tree class="tree_box" :option="treeConfig" ref="tableTree" :multiple="true" v-model="selectTable" choose-mode="some"></Tree>
 		</div>
 		<div class="content h-panel-body" v-show="selectType === 'json'">
@@ -35,12 +36,14 @@
 					getDatas: async (parent, resolve) => {
 						if (!parent) {
 							this.$nextTick(() => {
-								resolve(this.tableDbTree)
+								resolve(this.tableDbTree.map(item => {
+										item.disabled = true
+									return item
+								}))
 							})
 							return
 						}
 						if (parent.isDbLibrary) {
-							console.log(parent)
 							await this.fetchDbInfo(parent)
 							this.$nextTick(() => {
 								resolve(this.$store.getters.tableTree(parent.id))
@@ -78,7 +81,7 @@
 			generate () {
 				if (this.selectType === '数据库') {
 					return this.generateSql()
-				} else if (this.selectType === 'JSON') {
+				} else if (this.selectType === 'json') {
 					return this.generateJson()
 				}
 			},
@@ -94,6 +97,7 @@
 			generateJson () {
 				let resultList = []
 				resultList.push(this.jsonEditor.get())
+				console.log(resultList)
 				return resultList
 			}
 		}

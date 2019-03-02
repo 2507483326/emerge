@@ -25,6 +25,7 @@ export function genTemplateToFile (_this, generateDataList, generateConfigObj, p
 			})
 			console.log(renderTxt)
 			let renderPath = generateConfigObj.path + '\\' + renderName
+			fs.ensureFileSync(renderPath)
 			fs.writeFileSync(renderPath, renderTxt)
 		})
 	})

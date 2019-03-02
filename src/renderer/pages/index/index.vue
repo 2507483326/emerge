@@ -10,11 +10,12 @@
 					<table-menu ref="tableMenu" :model="item" :key="item.id"
 								@showContextMenu="showContextMenu" v-for="item in menuList"></table-menu>
 				</div>
+				<div class="no_data_tip_box" v-show="menuList.length === 0" @contextmenu.prevent.self.stop="showContextMenu">无数据库</div>
 			</section>
 			<!--右侧详细-->
 			<section class="table_detail_box">
-				<Table :datas="columnVoList" :columns="columns">
-					<div slot="empty">自定义提醒：暂时无数据</div>
+				<Table :datas="columnVoList"  :columns="columns">
+					<div slot="empty">暂时无数据</div>
 				</Table>
 			</section>
 		</div>
@@ -127,7 +128,6 @@
 			box-sizing border-box
 			padding 10px
 			overflow-y auto
-
 	.right_menu
 		position fixed
 		background #fff
@@ -135,4 +135,6 @@
 		border-radius 3px
 		z-index 999
 		display none
+		user-select none
+		cursor pointer
 </style>

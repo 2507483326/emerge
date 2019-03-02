@@ -21,7 +21,7 @@
 				<input type="text" placeholder="请输入用户名" v-model="sqlConnect.mysqlUser" />
 			</FormItem>
 			<FormItem label="密码" prop="mysqlPassword">
-				<input type="text" placeholder="请输入密码" v-model="sqlConnect.mysqlPassword" />
+				<input type="password" placeholder="请输入密码" v-model="sqlConnect.mysqlPassword" />
 			</FormItem>
 			<FormItem label="参数" prop="mysqlUrlParam">
 				<input type="text" placeholder="请输入连接所需参数" v-model="sqlConnect.mysqlUrlParam" />
