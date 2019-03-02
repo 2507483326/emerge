@@ -1,10 +1,16 @@
 import artTemplate from 'art-template'
 import fs from 'fs-extra'
+import { $const } from '@/common'
 export function genTemplateToFile (_this, generateDataList, generateConfigObj, paramsArray) {
 	console.log(paramsArray)
 	paramsArray.forEach(item => {
 		let paramsImport = artTemplate.defaults.imports
-		eval(`paramsImport['${item.name}'] = ${item.value}`)
+		// 动态方法
+		if (item.type === 2) {
+			eval(`${item.value}`)
+		} else {
+			eval(`paramsImport['${item.name}'] = ${item.value}`)
+		}
 	})
 	// 渲染文件名称
 	let renderName = ''

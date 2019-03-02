@@ -11,7 +11,7 @@
 				<input type="text" placeholder="请输入名称" v-model="params.name"/>
 			</FormItem>
 			<FormItem label="内容" prop="value">
-				<textarea v-autosize class="no_auto_width" v-model="params.value" placeholder="请输入内容"></textarea>
+				<textarea class="params_content" v-model="params.value" placeholder="请输入内容"></textarea>
 			</FormItem>
 		</Form>
 		<Loading text="加载中" :loading="loading"></Loading>
@@ -116,3 +116,8 @@
 		}
 	}
 </script>
+
+<style lang="stylus" scoped>
+	.params_content
+		height 100px
+</style>

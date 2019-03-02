@@ -119,7 +119,7 @@
 					display flex
 					align-items center
 					.name
-						font-size 22px
+						font-size 15px
 						margin-right 5px
 					.type
 						line-height 1em

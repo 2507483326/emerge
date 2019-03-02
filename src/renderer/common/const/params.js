@@ -9,7 +9,7 @@ export default [
 			title: '变量'
 		}, {
 			key: 2,
-			title: '方法'
+			title: '动态方法'
 		}]
 	}
 ]
