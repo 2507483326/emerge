@@ -273,6 +273,8 @@
 		border-radius 3px
 		z-index 999
 		display none
+		div
+			cursor pointer
 
 	.template_detail_box
 		flex 1

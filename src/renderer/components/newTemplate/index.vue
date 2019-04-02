@@ -51,7 +51,7 @@
 				try {
 					let validResult = this.$refs.form.valid()
 					if (!validResult.result) return false
-					if (this.isHasTemplateName(this.templateData.name)) {
+					if (this.isHasTemplateName(this.model.id, this.templateData.name)) {
 						this.$Message['warn']('模板名称已存在!')
 						return
 					}
