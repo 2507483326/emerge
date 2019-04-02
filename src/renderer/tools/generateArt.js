@@ -20,6 +20,7 @@ export function genTemplateToFile (_this, generateDataList, generateConfigObj, p
 			let generateData = data
 			eval('renderName = `' + templateItem.generateName + '`')
 			console.log(renderName)
+			console.log(generateData)
 			let renderTxt = templateItem.render({
 				generateData: generateData
 			})
