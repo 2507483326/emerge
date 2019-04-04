@@ -21,9 +21,7 @@ export function genTemplateToFile (_this, generateDataList, generateConfigObj, p
 			eval('renderName = `' + templateItem.generateName + '`')
 			console.log(renderName)
 			console.log(generateData)
-			let renderTxt = templateItem.render({
-				generateData: generateData
-			})
+			let renderTxt = templateItem.render(generateData)
 			console.log(renderTxt)
 			let renderPath = generateConfigObj.path + '\\' + renderName
 			fs.ensureFileSync(renderPath)
