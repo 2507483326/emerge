@@ -6,11 +6,13 @@ export default class Table {
 	tableType = ""
 	talbleRemarks = ""
 	lowerCaseTableName = ""
+	className = ""
 	primaryKeyList = []
 	columnVoList = []
 
 	constructor (data) {
 		this.tableName = data.tableName
+		this.className = data.lowerCaseTableName.replace(data.lowerCaseTableName.charAt(0), data.lowerCaseTableName.charAt(0).toUpperCase())
 		this.tableType = data.tableType
 		this.talbleRemarks = data.talbleRemarks
 		this.lowerCaseTableName = data.lowerCaseTableName
