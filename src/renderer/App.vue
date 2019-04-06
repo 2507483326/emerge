@@ -7,6 +7,7 @@
 		name: 'emerge',
 		mounted () {
 			this.init()
+			this.disableDefaultDrag()
 		},
 		methods: {
 			async init () {
@@ -14,6 +15,26 @@
 				await this.$store.dispatch('initDb')
 				await this.$store.dispatch('initTemplate')
 				await this.$store.dispatch('initGlobalParams')
+			},
+			disableDefaultDrag () {
+				document.addEventListener('dragover', (event) => {
+					event.preventDefault()
+				}, false)
+				document.addEventListener('dragend', (event) => {
+					event.preventDefault()
+				}, false)
+				document.addEventListener('dragstart', (event) => {
+					event.preventDefault()
+				}, false)
+				document.addEventListener('drag', (event) => {
+					event.preventDefault()
+				}, false)
+				document.addEventListener('dragenter', (event) => {
+					event.preventDefault()
+				}, false)
+				document.addEventListener('dragleave', (event) => {
+					event.preventDefault()
+				}, false)
 			}
 		}
 	}
