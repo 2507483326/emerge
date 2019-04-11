@@ -87,7 +87,7 @@
 						name: this.templateData.name,
 						file: this.file
 					})
-					this.$Message['error']('导入模板文件成功!')
+					this.$Message['success']('导入模板文件成功!')
 					this.isShow = false
 				} catch (e) {
 					console.error(e)
