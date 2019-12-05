@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/version-1.0-yellow" alt="https://img.shields.io/badge/version-1.0-yellow"  /> ![https://img.shields.io/badge/vue-2.6.10-brightgreen](https://img.shields.io/badge/vue-2.6.10-brightgreen) ![https://img.shields.io/badge/electron-2.0.4-blue](https://img.shields.io/badge/electron-2.0.4-blue) ![https://img.shields.io/badge/monacoEditor-0.18.1-red](https://img.shields.io/badge/monacoEditor-0.18.1-red) ![https://img.shields.io/badge/prettydiff-101.2.6-orange](https://img.shields.io/badge/prettydiff-101.2.6-orange) ![https://img.shields.io/badge/artTemplate-4.13.2-inactive](https://img.shields.io/badge/artTemplate-4.13.2-inactive)
 
-> 代码生成器
+> 可视化代码生成器
 
 #### 项目截图
 
