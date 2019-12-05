@@ -1,26 +1,25 @@
 # emerge
 
-<img src="https://img.shields.io/badge/version-1.0-yellow" alt="https://img.shields.io/badge/version-1.0-yellow"  /> ![https://img.shields.io/badge/vue-2.6.10-brightgreen](https://img.shields.io/badge/vue-2.6.10-brightgreen) ![https://img.shields.io/badge/electron-2.0.4-blue](https://img.shields.io/badge/electron-2.0.4-blue) ![https://img.shields.io/badge/monacoEditor-0.18.1-red](https://img.shields.io/badge/monacoEditor-0.18.1-red) ![https://img.shields.io/badge/prettydiff-101.2.6-orange](https://img.shields.io/badge/prettydiff-101.2.6-orange)
+<img src="https://img.shields.io/badge/version-1.0-yellow" alt="https://img.shields.io/badge/version-1.0-yellow"  /> ![https://img.shields.io/badge/vue-2.6.10-brightgreen](https://img.shields.io/badge/vue-2.6.10-brightgreen) ![https://img.shields.io/badge/electron-2.0.4-blue](https://img.shields.io/badge/electron-2.0.4-blue) ![https://img.shields.io/badge/monacoEditor-0.18.1-red](https://img.shields.io/badge/monacoEditor-0.18.1-red) ![https://img.shields.io/badge/prettydiff-101.2.6-orange](https://img.shields.io/badge/prettydiff-101.2.6-orange) ![https://img.shields.io/badge/artTemplate-4.13.2-inactive](https://img.shields.io/badge/artTemplate-4.13.2-inactive)
 
 > 代码生成器
 
 #### 项目截图
 
+![数据库](.\static\img\sql.jpg)
 
+![标签](.\static\img\tag.jpg)
 
-``` bash
-# install dependencies
-npm install
+![模板](.\static\img\template.jpg)
 
-# serve with hot reload at localhost:9080
-npm run dev
+![代码生成](.\static\img\generate-01.jpg)
 
-# build electron application for production
-npm run build
+![代码生成](.\static\img\generate-02.jpg)
 
+![代码比较](.\static\img\compare.jpg)
 
-```
+![完成](.\static\img\finnish.jpg)
 
----
+## 项目使用说明
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[8fae476](https://github.com/SimulatedGREG/electron-vue/tree/8fae4763e9d225d3691b627e83b9e09b56f6c935) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+emerge代码生成器主要是以MYSQL数据库表结合以artTemplate逆向自动生成前后端代码，减少前后端代码重复代码编写
