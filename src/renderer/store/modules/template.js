@@ -1,163 +1,78 @@
-import UUID from 'uuid-js'
-import { FolderMenu, Template, GlobalParamsVo } from '@/model'
-import fs from 'fs-extra'
-import clone from 'clone'
 const state = {
 	templateList: [],
-	globalParamsList: [
-	]
+	templateFolderList: []
 }
 
 const mutations = {
-	SET_TEMPLATE_LIST (state, data) {
-		state.templateList = data
+	ADD_TEMPLATE_FOLDER (state, templateFolder) {
+		state.templateFolderList.push(templateFolder)
 	},
-	ADD_TEMPLATE_FOLDER (state, data) {
-		state.templateList.push(data)
-	},
-	ADD_TEMPLATE (state, data) {
-		console.log(data)
-		let templateList = state.templateList.find(item => {
-			return item.id === data.folderId
+	REMOVE_TEMPLATE_FOLDER (state, id) {
+		const index = state.templateFolderList.findIndex(item => {
+			return item.id === id
 		})
-		templateList.children.push(data.data)
-		console.log(state)
-	},
-	CHANGE_TEMPLATE (state, data) {
-		let templateList = state.templateList.find(item => {
-			return item.id === data.folderId
+		if (index >=0) {
+			state.templateFolderList.splice(index, 1)
+		}
+		state.templateList = state.templateList.filter(item => {
+			return item.folderId !== id
 		})
-		let template = templateList.children.find(item => {
-			return item.id === data.id
-		})
-		template[data.key] = data.value
 	},
-	DELETE_TEMPLATE (state, id) {
-		let templateList = clone(state.templateList)
-		templateList = templateList.map(item => {
-			item.children = item.children.filter(childItem => {
-				return childItem.id !== id
-			})
-			return item
-		})
-		templateList = templateList.filter(item => {
-			return item.id !== id
-		})
-		state.templateList = templateList
+	ADD_TEMPLATE (state, template) {
+		state.templateList.push(template)
 	},
-	ADD_GLOBAL_PARAMS (state, data) {
-		state.globalParamsList.unshift(data)
-	},
-	SET_GLOBAL_PARAMS (state, data) {
-		state.globalParamsList = data
-	},
-	UPDATE_GLOBAL_PARAMS (state, data) {
-		let originGlobalParams = state.globalParamsList.find(item => {
-			return item.id === data.id
+	REMOVE_TEMPLATE (state, id) {
+		const index = state.templateList.findIndex(item => {
+			return item.id === id
 		})
-		originGlobalParams.name = data.name
-		originGlobalParams.value = data.value
-		originGlobalParams.type = data.type
-		originGlobalParams.isShow = data.isShow
+		if (index >=0) {
+			state.templateList.splice(index, 1)
+		}
 	},
-	DELETE_GLOBAL_PARAMS (state, id) {
-		state.globalParamsList = state.globalParamsList.filter(item => {
-			return item.id !== id
+	UPDATE_TEMPLATE (state, template) {
+		const index = state.templateList.findIndex(item => {
+			return item.id === template.id
 		})
+		const oldTemplate = state.templateList[index]
+		oldTemplate.content = template.content
+		oldTemplate.language = template.language
+		oldTemplate.outPath = template.outPath
 	}
 }
 
 const actions = {
-	addTemplateFolder ({ getters, commit }, data) {
-		fs.ensureDirSync(data.path)
-		commit('ADD_TEMPLATE_FOLDER', new FolderMenu({
-			id: UUID.create().toString(),
-			name: data.name,
-			path: data.path,
-			isFolder: true
-		}))
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	addExistsTemplate ({ dispatch }, data) {
-		let folder = state.templateList.find(item => {
-			return item.id === data.folderId
-		})
-		let filePath = `${folder.path}\\${data.name}.art`
-		fs.copy(data.file.path, filePath)
-		dispatch('addTemplate', data)
-	},
-	addTemplate ({ getters, state, commit }, data) {
-		let folder = state.templateList.find(item => {
-			return item.id === data.folderId
-		})
-		let filePath = `${folder.path}\\${data.name}.art`
-		fs.ensureFileSync(filePath)
-		commit('ADD_TEMPLATE', {
-			folderId: data.folderId,
-			data: new Template({
-				id: UUID.create().toString(),
-				folderId: data.folderId,
-				name: data.name,
-				path: filePath
+	addTemplateFolder ({ state, commit }, templateFolder) {
+		return new Promise((resolve, reject) => {
+			const index = state.templateFolderList.findIndex(item => {
+				return item.name === templateFolder.name
 			})
+			if (index < 0) {
+				commit('ADD_TEMPLATE_FOLDER', templateFolder)
+				resolve()
+			}
+			reject('当前模板组已存在, 请勿重复添加!')
 		})
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
 	},
-	initTemplate ({ state, commit }) {
-		try {
-			fs.ensureFileSync('./userData/default.json')
-			let oldData = fs.readJsonSync('./userData/default.json')
-			if (oldData && oldData.templateList) {
-				commit('SET_TEMPLATE_LIST', oldData.templateList)
+	removeTemplateFolder ({ commit }, id) {
+		commit('REMOVE_TEMPLATE_FOLDER', id)
+	},
+	addTemplate ({ state, commit }, template) {
+		return new Promise((resolve, reject) => {
+			const index = state.templateList.findIndex(item => {
+				return item.name === template.name && item.folderId === template.folderId
+			})
+			if (index < 0) {
+				commit('ADD_TEMPLATE', template)
+				resolve()
 			}
-		} catch (e) {
-			console.warn('default.json解析失败')
-		}
+			reject('当前模板已存在, 请勿重复添加!')
+		})
 	},
-	deleteTemplateFolder ({ getters, commit }, id) {
-		commit('DELETE_TEMPLATE', id)
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	removeTemplate ({ commit }, id) {
+		commit('REMOVE_TEMPLATE', id)
 	},
-	deleteTemplate ({ getters, commit }, id) {
-		commit('DELETE_TEMPLATE', id)
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	changeTemplate ({ getters, commit }, data) {
-		commit('CHANGE_TEMPLATE', data)
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	addGlobalParams ({ getters, commit }, data) {
-		commit('ADD_GLOBAL_PARAMS', new GlobalParamsVo({
-			id: UUID.create().toString(),
-			type: data.type,
-			name: data.name,
-			value: data.value
-		}))
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	updateGlobalParams ({ getters, commit }, data) {
-		commit('UPDATE_GLOBAL_PARAMS', new GlobalParamsVo({
-			id: data.id,
-			type: data.type,
-			name: data.name,
-			value: data.value
-		}))
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	deleteGlobalParams ({ getters, commit }, data) {
-		commit('DELETE_GLOBAL_PARAMS', data.id)
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	initGlobalParams ({ commit }) {
-		try {
-			fs.ensureFileSync('./userData/default.json')
-			let oldData = fs.readJsonSync('./userData/default.json')
-			if (oldData && oldData.globalParamsList) {
-				commit('SET_GLOBAL_PARAMS', oldData.globalParamsList)
-			}
-		} catch (e) {
-			console.warn('default.json解析失败')
-		}
+	updateTemplate ({ commit }, template) {
+		commit('UPDATE_TEMPLATE', template)
 	}
 }
 

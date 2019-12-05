@@ -1,90 +1,39 @@
-import UUID from "uuid-js"
-import { DbMenu } from '@/model'
-import clone from 'clone'
+import db from "./modules/db";
+
 const getters = {
-	saveJson: state => {
-		let saveObj = {}
-		let saveDbList = clone(state.db.dbList).map(item => {
-			item.isConnect = false
+	templateTree: (state) => {
+		const templateFolderList = JSON.parse(JSON.stringify(state.template.templateFolderList))
+		const templateList = JSON.parse(JSON.stringify(state.template.templateList))
+		templateFolderList.forEach(item => {
+			item.title = item.name
 			item.children = []
-			return item
-		})
-		saveObj.dbList = saveDbList
-		saveObj.globalParamsList = clone(state.template.globalParamsList).map(item => {
-			if (item.id == 0) {
-				item.name = ''
-				item.value = ''
-			}
-			item.isShow = false
-			return item
-		})
-		saveObj.templateList = state.template.templateList
-		return saveObj
-	},
-	menuList: state => {
-		let dbList = clone(state.db.dbList)
-		let menuList = dbList.map(item => {
-			let dbId = item.id
-			let tableVo = state.db.tableList.find(item => {
-				return item.id === dbId
+			templateList.forEach(template => {
+				template.title = template.name
+				if (template.folderId === item.id) {
+					item.children.push(template)
+				}
 			})
-			if (tableVo && item.isConnect) {
-				tableVo.tableList.forEach(tableItem => {
-					item.children.push(new DbMenu({
-						id: UUID.create().toString(),
-						dbId: dbId,
-						name: tableItem.tableName
-					}))
-				})
-			}
-			return item
 		})
-		return menuList
-	},
-	getDbById: state => id => {
-		return state.db.dbList.find(item => {
-			return item.id === id
+		return templateFolderList.filter(item => {
+			return item.children.length > 0
 		})
 	},
-	tableDetail: state => data => {
-		let tableListVo = state.db.tableList.find(item => {
-			return item.id === data.dbId
+	tableTree: (state) => {
+		const dbList = JSON.parse(JSON.stringify(state.db.dbList))
+		const dbTableMap = JSON.parse(JSON.stringify(state.db.dbTableMap))
+		dbList.forEach(item => {
+			console.log(item)
+			item.title = item.name
+			item.children = dbTableMap[item.id] ? dbTableMap[item.id].map(table => {
+				table.title = table.lowerCaseTableName
+				return table
+			}) : []
 		})
-		return tableListVo.tableList.find(item => {
-			return item.tableName === data.name
+		console.log(dbList)
+		return dbList.filter(item => {
+			return item.children.length > 0
 		})
-	},
-	templateList: state => {
-		return clone(state.template.templateList)
-	},
-	templateDetail: state => data => {
-		let templateListVo = state.template.templateList.find(item => {
-			return item.id === data.folderId
-		})
-		return templateListVo.children.find(item => {
-			return item.id === data.id
-		})
-	},
-	globalParamsList: state => clone(state.template.globalParamsList),
-	tableDbTree: state => {
-		let dbList = clone(state.db.dbList)
-		return dbList
-	},
-	tableTree: state => dbId => {
-		let resultList = []
-		let tableListVo = state.db.tableList.find(item => {
-			return item.id === dbId
-		})
-		if (!tableListVo) return []
-		for (let i = 0; i < tableListVo.tableList.length; i++) {
-			let item = tableListVo.tableList[i]
-			resultList.push(new DbMenu({
-				id: UUID.create().toString(),
-				name: item.tableName,
-				dbId: dbId
-			}))
-		}
-		return resultList
 	}
 }
+
 export default getters

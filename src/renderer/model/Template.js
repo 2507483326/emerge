@@ -1,20 +1,17 @@
-import FolderMenu from "./FolderMenu"
-
-export default class Template extends FolderMenu {
-
+import uuid from 'uuid'
+export default class Template {
 	constructor ({
-		id = null,
 		folderId = null,
-		children = [],
-		name = "",
-		isFolder = false,
-		path = '',
-		generateName = '',
-		language = 'artHtml'
+		name = '',
+		outPath = '',
+		content = '',
+		language = 'html'
 	}) {
-		super({id, folderId, children, name, isFolder, path})
-		this.generateName = generateName
+		this.id = uuid.v1()
+		this.folderId = folderId
+		this.name = name
+		this.outPath = outPath
+		this.content = content
 		this.language = language
 	}
-
 }

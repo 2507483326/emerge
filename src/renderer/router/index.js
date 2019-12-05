@@ -1,33 +1,50 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
+import Db from '@/views/Db.vue'
+import Template from '@/views/Template'
+import TemplateDetail from '@/views/TemplateDetail'
+import TemplateEmptyDetail from '@/views/TemplateEmptyDetail'
+import Generate from '@/views/Generate'
+Vue.use(VueRouter)
 
-Vue.use(Router)
+const routes = [
+	{
+		path: '/',
+		name: 'db',
+		component: Db
+	},
+	{
+		path: '/template',
+		name: 'template',
+		component: Template,
+		children: [
+			{
+				path: '/',
+				name: 'template',
+				component: TemplateEmptyDetail
+			},
+			{
+				path: 'detail/:folderId/:templateId',
+				name: 'template',
+				component: TemplateDetail
+			}
+		]
+	},
+	{
+		path: '/generate',
+		name: 'generate',
+		component: Generate
+	},
+	{
+		path: '*',
+		redirect: '/'
+	}
+]
 
-export default new Router({
-	routes: [
-		{
-			path: '/',
-			name: 'landing',
-			component: require('@/pages/index').default
-		},
-		{
-			path: '/template',
-			name: 'template',
-			component: require('@/pages/template').default
-		},
-		{
-			path: '/globalParams',
-			name: 'globalParams',
-			component: require('@/pages/globalParams').default
-		},
-		{
-			path: '/generate',
-			name: 'generate',
-			component: require('@/pages/generate').default
-		},
-		{
-			path: '*',
-			redirect: '/'
-		}
-	]
+const router = new VueRouter({
+	mode: 'hash',
+	base: process.env.BASE_URL,
+	routes
 })
+
+export default router

@@ -1,21 +1,23 @@
 <template>
-	<router-view></router-view>
+	<div id="app">
+		<base-header></base-header>
+		<div class="main">
+			<router-view></router-view>
+		</div>
+	</div>
 </template>
 
 <script>
+	import BaseHeader from '@/components/layout/BaseHeader'
 	export default {
 		name: 'emerge',
+		components: {
+			BaseHeader
+		},
 		mounted () {
-			this.init()
 			this.disableDefaultDrag()
 		},
 		methods: {
-			async init () {
-				console.log('init')
-				await this.$store.dispatch('initDb')
-				await this.$store.dispatch('initTemplate')
-				await this.$store.dispatch('initGlobalParams')
-			},
 			disableDefaultDrag () {
 				document.addEventListener('dragover', (event) => {
 					event.preventDefault()
@@ -40,32 +42,43 @@
 	}
 </script>
 
-<style lang="less">
-	@import (less) "~heyui/themes/var.less";
-	@import (less) "~heyui/themes/common.less";
-</style>
-
 <style lang="stylus">
-	/* CSS */
+	@import "assets/font/iconfont.css"
 	*
-		padding 0
-		margin 0
-	html,body
-		height 100%
-	body
-		background #f3f6f8
-	.container
-		height 100%
+		box-sizing border-box
+	#app
 		display flex
-		flex-direction column
-	.h-tooltip
-		word-break break-all
-	.no_auto_width
-		resize none
-	.no_data_tip_box
-		padding 0 10px
-		color #999999
-		z-index -1
-		user-select none
-		cursor default
+		height 100vh
+		.main
+			flex 1
+	::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+	}
+
+	/*外层轨道。可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
+
+	::-webkit-scrollbar-track {
+		width: 6px;
+		background-color: transparent;
+		-webkit-border-radius: 2em;
+		-moz-border-radius: 2em;
+		border-radius: 2em;
+	}
+
+	/*滚动条的设置*/
+
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(147, 155, 166, .5);
+		background-clip: padding-box;
+		min-height: 28px;
+		-webkit-border-radius: 2em;
+		-moz-border-radius: 2em;
+		border-radius: 2em;
+	}
+	/*滚动条移上去的背景*/
+
+	::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(147, 155, 166, .9);
+	}
 </style>

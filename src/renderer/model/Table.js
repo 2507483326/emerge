@@ -1,30 +1,19 @@
-import PrimaryKey from "./PrimaryKey"
-import Column from "./Column"
-
+import Column from './Column'
+import uuid from 'uuid'
 export default class Table {
-	tableName = ""
-	tableType = ""
-	talbleRemarks = ""
-	lowerCaseTableName = ""
-	className = ""
-	primaryKeyList = []
-	columnVoList = []
-
-	constructor (data) {
-		this.tableName = data.tableName
-		this.className = data.lowerCaseTableName.replace(data.lowerCaseTableName.charAt(0), data.lowerCaseTableName.charAt(0).toUpperCase())
-		this.tableType = data.tableType
-		this.talbleRemarks = data.talbleRemarks
-		this.lowerCaseTableName = data.lowerCaseTableName
-		data.primaryKeyList.forEach(item => {
-			this.primaryKeyList.push(new PrimaryKey(item))
+	constructor (tableName, fields) {
+		this.tableId = uuid.v1()
+		this.tableName = tableName
+		this.className = this.tableName.replace(/\_(\w)/g, function(all, letter){
+			return letter.toUpperCase();
 		})
-		data.columnVoList.forEach(item => {
-			let isPrimaryKey = data.primaryKeyList.some(primaryKeyItem => {
-				return primaryKeyItem.columnName === item.columnName
-			})
-			item.isPrimaryKey = isPrimaryKey
-			this.columnVoList.push(new Column(item))
-		})
+		this.className = this.className.charAt(0).toUpperCase() + this.className.slice(1)
+		this.lowerCaseTableName = this.className.charAt(0).toLowerCase() + this.className.slice(1)
+		this.columns = []
+		for (let fieldName in fields) {
+			let fieldObj = fields[fieldName]
+			fieldObj.name = fieldName
+			this.columns.push(new Column(fieldObj))
+		}
 	}
 }

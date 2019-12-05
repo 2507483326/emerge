@@ -1,85 +1,88 @@
-import { DbMenu, TableVo, Table } from '@/model'
-import UUID from 'uuid-js'
-import fs from 'fs-extra'
 const state = {
 	dbList: [],
-	tableList: []
+	dbTableMap: {},
+	tableExtendTagList: []
 }
 
 const mutations = {
 	ADD_DB (state, db) {
 		state.dbList.push(db)
 	},
-	SET_DB_LIST (state, dbList) {
-		state.dbList = dbList
-	},
-	CHANGE_DB (state, data) {
-		let dbVo = state.dbList.find(item => {
-			return item.id === data.dbId
+	REMOVE_DB (state, dbId) {
+		const index = state.dbList.findIndex(item => {
+			return item.id === dbId
 		})
-		if (dbVo) {
-			dbVo.isConnect = data.flag
+		if (index >= 0) {
+			state.dbList.splice(index, 1)
 		}
-	},
-	DELETE_DB (state, dbId) {
-		state.dbList = state.dbList.filter(item => {
-			return item.id !== dbId
+		state.dbTableMap[dbId] = null
+		const deleteTableCustomList = []
+		state.tableExtendTagList.forEach((item, index) => {
+			if (item.dbId === dbId) {
+				deleteTableCustomList.push(index)
+			}
+		})
+		deleteTableCustomList.forEach(delteIndex => {
+			state.tableExtendTagList.splice(delteIndex, 1)
 		})
 	},
-	ADD_TABLE (state, tableList) {
-		let originTableList = state.tableList.filter(item => {
-			return item.id !== tableList.id
+	ADD_DB_TABLE_LIST (state, tableListModel) {
+		window.globbalVue.$set(state.dbTableMap, tableListModel.dbId, [])
+		state.dbTableMap[tableListModel.dbId].push(...tableListModel.tableList)
+	},
+	ADD_TABLE_CUSTOM_TAG (state, customTagObj) {
+		state.tableExtendTagList.push(customTagObj)
+	},
+	REMOVE_TABLE_CUSTOM_TAG (state, customTagId) {
+		const index = state.tableExtendTagList.findIndex(item => {
+			return item.id === customTagId
 		})
-		originTableList.push(tableList)
-		state.tableList = originTableList
+		if (index >= 0) {
+			state.tableExtendTagList.splice(index, 1)
+		}
 	}
 }
 
 const actions = {
-	addDb ({ getters, commit }, sqlConnectConfig) {
-		let db = new DbMenu({
-			id: UUID.create().toString(),
-			name: `${sqlConnectConfig.name} (${sqlConnectConfig.mysqlDB})`,
-			isDbLibrary: true,
-			connectConfig: sqlConnectConfig
-		})
-		commit('ADD_DB', db)
-		// 将新的dbList存储到文件
-		fs.ensureFileSync('./userData/default.json')
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
-	},
-	initDb ({ state, commit }) {
-		try {
-			fs.ensureFileSync('./userData/default.json')
-			let oldData = fs.readJsonSync('./userData/default.json')
-			if (oldData && oldData.dbList) {
-				commit('SET_DB_LIST', oldData.dbList)
+	addDb ({ state, commit }, db) {
+		return new Promise((resolve, reject) => {
+			const index = state.dbList.findIndex(item => {
+				console.log(item)
+				return item.name === db.name
+			})
+			if (index < 0) {
+				commit('ADD_DB', db)
+				resolve()
 			}
-		} catch (e) {
-			console.warn('default.json解析失败')
-		}
-	},
-	addTable ({ state, commit }, data) {
-		let tableList = []
-		data.data.dbVo.tableVoList.forEach(item => {
-			tableList.push(new Table(item))
+			reject(new Error('重复的数据库连接名称!'))
 		})
-		let tableListVo = new TableVo({
-			id: data.id,
-			tableList: tableList
+	},
+	addDbTableList ({ state, commit }, dbTableModel) {
+		commit('ADD_DB_TABLE_LIST', {
+			dbId: dbTableModel.id,
+			tableList: dbTableModel.tableList
 		})
-		commit('ADD_TABLE', tableListVo)
-		commit('CHANGE_DB', {dbId: data.id, flag: true})
 	},
-	closeConnect ({ commit }, dbId) {
-		commit('CHANGE_DB', {dbId, flag: false})
+	removeDb ({ commit }, dbId) {
+		commit('REMOVE_DB', dbId)
 	},
-	deleteDb ({ getters, commit }, dbId) {
-		commit('DELETE_DB', dbId)
-		fs.ensureFileSync('./userData/default.json')
-		fs.writeJsonSync('./userData/default.json', getters.saveJson)
+	addTableCustomTag ({ state, commit }, customTagObj) {
+		return new Promise((resolve, reject) => {
+			const index = state.tableExtendTagList.findIndex(item => {
+				return item.dbId === customTagObj.dbId && item.tableId === customTagObj.tableId && item.columnId === customTagObj.columnId && item.name === customTagObj.name
+			})
+			if (index < 0) {
+				commit('ADD_TABLE_CUSTOM_TAG', customTagObj)
+				resolve()
+			}
+			reject('当前标签已存在, 请勿重复添加!')
+		})
+	},
+	removeTableCustomTag ({ commit }, customTagId) {
+		commit('REMOVE_TABLE_CUSTOM_TAG', customTagId)
 	}
 }
+
 
 export default {
 	state,

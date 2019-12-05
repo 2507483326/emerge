@@ -1,8 +1,10 @@
 # emerge
 
-> An electron-vue project
+<img src="https://img.shields.io/badge/version-1.0-yellow" alt="https://img.shields.io/badge/version-1.0-yellow"  />![https://img.shields.io/badge/vue-2.6.10-brightgreen](https://img.shields.io/badge/vue-2.6.10-brightgreen)![https://img.shields.io/badge/electron-2.0.4-blue](https://img.shields.io/badge/electron-2.0.4-blue)
 
-#### Build Setup
+> 代码生成器
+
+#### 项目截图
 
 ``` bash
 # install dependencies

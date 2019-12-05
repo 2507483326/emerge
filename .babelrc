@@ -1,47 +1,30 @@
 {
-	"comments": false,
-	"env": {
-		"main": {
-			"presets": [
-				[
-					"env",
-					{
-						"targets": {
-							"node": 7
-						}
-					}
-				],
-				"stage-0"
-			]
-		},
-		"renderer": {
-			"presets": [
-				[
-					"env",
-					{
-						"modules": false
-					}
-				],
-				"stage-0"
-			],
-			"plugins": ["transform-decorators-legacy", "transform-class-properties", "transform-runtime"]
-		},
-		"web": {
-			"presets": [
-				[
-					"env",
-					{
-						"modules": false
-					}
-				],
-				"stage-0"
-			],
-			"plugins": ["transform-decorators-legacy", "transform-class-properties", "transform-runtime"]
-		}
-	},
-	"plugins": [
-		"transform-decorators-legacy",
-		"transform-class-properties",
-		"transform-runtime"
-	]
+  "comments": false,
+  "env": {
+    "main": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 7 }
+        }],
+        "stage-0"
+      ]
+    },
+    "renderer": {
+      "presets": [
+        ["env", {
+          "modules": false
+        }],
+        "stage-0"
+      ]
+    },
+    "web": {
+      "presets": [
+        ["env", {
+          "modules": false
+        }],
+        "stage-0"
+      ]
+    }
+  },
+  "plugins": ["transform-runtime"]
 }
