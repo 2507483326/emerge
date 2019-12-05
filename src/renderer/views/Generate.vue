@@ -94,8 +94,8 @@
 					table: tableItem
 				})
 				const outputFolder = this.$refs.selectTemplate.getOutputPath()
-				console.log(templateItem)
-				const outputPath = outputFolder + templateItem.outPath
+				const table = tableItem
+				const outputPath = outputFolder + '/' + eval('`' + templateItem.outPath + '`')
 				// 判断文件是否存在
 				fs.ensureFileSync(outputPath)
 				const originContent = fs.readFileSync(outputPath).toString()
