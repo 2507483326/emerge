@@ -8,15 +8,15 @@
 
 ![数据库](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/sql.jpg)
 
-![标签](.\static\img\tag.jpg)
+![标签](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/tag.jpg)
 
 ![模板](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/template.jpg)
 
-![代码生成](.\static\img\generate-01.jpg)
+![代码生成](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/generate-01.jpg)
 
 ![代码生成](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/generate-02.jpg)
 
-![代码比较](.\static\img\compare.jpg)
+![代码比较](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/compare.jpg)
 
 ![完成](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/finnish.jpg)
 
