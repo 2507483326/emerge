@@ -39,7 +39,7 @@
 		},
 		methods: {
 			reset () {
-				this.templateModel.outPath = null
+				this.$refs.templateForm.resetFields()
 				this.templateTree = JSON.parse(JSON.stringify(this.$store.getters.templateTree))
 			},
 			getOutputPath () {
