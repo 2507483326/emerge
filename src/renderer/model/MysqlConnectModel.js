@@ -12,6 +12,7 @@ export default class MysqlConnectModel {
 		this.userName = userName
 		this.password = password
 		this.options = {}
+		this.options.host = host
 		this.options.port = port
 		this.options.dialect = dialect
 		this.options.directory = directory
