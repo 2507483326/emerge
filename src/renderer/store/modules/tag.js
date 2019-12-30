@@ -20,7 +20,7 @@ const actions = {
 	addNewCustomTag ({state, commit }, tag) {
 		return new Promise((resolve, reject) => {
 			const index = state.customTagList.findIndex(item => {
-				return item.name === tag.name || item.key === tag.key || item.name === '主键' || item.name === '不为空' || item.name === '数值' || item.name === '文本' || item.name === '日期'
+				return item.name === tag.name || item.key === tag.key || tag.name === '主键' || tag.name === '不为空' || tag.name === '数值' || tag.name === '文本' || tag.name === '日期'
 			})
 			if (index < 0) {
 				commit('ADD_NEW_CUSTOM_TAG', tag)
