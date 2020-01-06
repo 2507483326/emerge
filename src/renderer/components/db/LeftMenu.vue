@@ -22,4 +22,5 @@
 	.menu_list_box
 		height 100%
 		overflow-y auto
+		overflow-x hidden
 </style>

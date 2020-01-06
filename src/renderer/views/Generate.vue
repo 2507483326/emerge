@@ -77,10 +77,12 @@
 				const tableExtendTagList = this.$store.state.db.tableExtendTagList
 				tableList.forEach(tableItem => {
 					tableItem = JSON.parse(JSON.stringify(tableItem))
-					tableExtendTagList.forEach(tableExtendTagItem => {
-						if (tableExtendTagItem.tableId === tableItem.tableId && tableExtendTagItem.key) {
-							tableItem[tableExtendTagItem.key] = true
-						}
+					tableItem.columns.forEach(columnItem => {
+						tableExtendTagList.forEach(tableExtendTagItem => {
+							if (tableExtendTagItem.columnId === columnItem.columnId) {
+								columnItem[tableExtendTagItem.key] = true
+							}
+						})
 					})
 					templateList.forEach(templateItem => {
 						this.generateTemplate(tableItem, templateItem)
@@ -99,11 +101,15 @@
 				// 判断文件是否存在
 				fs.ensureFileSync(outputPath)
 				const originContent = fs.readFileSync(outputPath).toString()
-				console.log(originContent)
 				if (originContent != null && originContent !== '') {
 					prettydiff.options.source = content
 					prettydiff.options.diff = originContent
-					const diffResult = prettydiff()
+					let diffResult = null
+					try {
+						diffResult = prettydiff()
+					} catch (e) {
+						diffResult = ''
+					}
 					// 需要代码合并
 					if (diffResult) {
 						this.diffList.push({

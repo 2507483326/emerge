@@ -13,31 +13,6 @@
 		name: 'emerge',
 		components: {
 			BaseHeader
-		},
-		mounted () {
-			this.disableDefaultDrag()
-		},
-		methods: {
-			disableDefaultDrag () {
-				document.addEventListener('dragover', (event) => {
-					event.preventDefault()
-				}, false)
-				document.addEventListener('dragend', (event) => {
-					event.preventDefault()
-				}, false)
-				document.addEventListener('dragstart', (event) => {
-					event.preventDefault()
-				}, false)
-				document.addEventListener('drag', (event) => {
-					event.preventDefault()
-				}, false)
-				document.addEventListener('dragenter', (event) => {
-					event.preventDefault()
-				}, false)
-				document.addEventListener('dragleave', (event) => {
-					event.preventDefault()
-				}, false)
-			}
 		}
 	}
 </script>

@@ -58,6 +58,12 @@
 			NewTemplateFileModal,
 			TagsNav
 		},
+		mounted () {
+			this.disableDefaultDrag()
+		},
+		beforeDestroy () {
+			this.ableDefaultDrag()
+		},
 		methods: {
 			showNewTemplateFolder () {
 				this.$refs.newTemplateFolderModal.show()
@@ -67,6 +73,25 @@
 			},
 			addTemplateFile (templateFolderModel) {
 				this.$refs.newTemplateFileModal.show(templateFolderModel.id)
+			},
+			customPrevent (event) {
+				event.preventDefault()
+			},
+			disableDefaultDrag () {
+				document.addEventListener('dragover', this.customPrevent, false)
+				document.addEventListener('dragend', this.customPrevent, false)
+				document.addEventListener('dragstart', this.customPrevent, false)
+				document.addEventListener('drag', this.customPrevent, false)
+				document.addEventListener('dragenter', this.customPrevent, false)
+				document.addEventListener('dragleave', this.customPrevent, false)
+			},
+			ableDefaultDrag () {
+				document.removeEventListener('dragover', this.customPrevent, false)
+				document.removeEventListener('dragend', this.customPrevent, false)
+				document.removeEventListener('dragstart', this.customPrevent, false)
+				document.removeEventListener('drag', this.customPrevent, false)
+				document.removeEventListener('dragenter', this.customPrevent, false)
+				document.removeEventListener('dragleave', this.customPrevent, false)
 			}
 		}
 	}
