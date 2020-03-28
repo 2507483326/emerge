@@ -17,8 +17,6 @@
 </template>
 
 <script>
-	import template from "../../store/modules/template";
-
 	const { dialog } = require('electron').remote
 	export default {
 		data () {
@@ -42,12 +40,19 @@
 			}
 		},
 		mounted () {
+			this.$refs.templateForm.resetFields()
 			this.templateTree = JSON.parse(JSON.stringify(this.$store.getters.templateTree))
+			this.$nextTick(() => {
+				if (this.pathList && this.pathList.length > 0) {
+					this.templateModel.outPath = this.pathList[0]
+				}
+			})
 		},
 		methods: {
 			reset () {
-				this.$refs.templateForm.resetFields()
-				this.templateTree = JSON.parse(JSON.stringify(this.$store.getters.templateTree))
+				this.$nextTick(() => {
+					this.templateTree = JSON.parse(JSON.stringify(this.$store.getters.templateTree))
+				})
 			},
 			getOutputPath () {
 				return this.templateModel.outPath

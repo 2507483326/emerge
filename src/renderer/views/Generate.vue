@@ -113,6 +113,7 @@
 			},
 			generateTemplate (tableItem, templateItem) {
 				const render = artTemplate.compile(templateItem.content)
+				const table = tableItem
 				const content = render({
 					table: tableItem
 				})
@@ -123,6 +124,7 @@
 					return
 				}
 				const outputPath = outputFolder + '/' + eval('`' + templateItem.outPath + '`')
+				fs.ensureFileSync(path.normalize(outputPath))
 				// 生成文件 直接覆盖
 				fs.writeFileSync(path.normalize(outputPath), content)
 			}

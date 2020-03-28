@@ -9,9 +9,12 @@ const mutations = {
 		})
 		if (index < 0) {
 			if (state.pathList.length > 4) {
-				state.pathList.shift()
+				state.pathList.pop()
 			}
-			state.pathList.push(path)
+			state.pathList.unshift(path)
+		} else {
+			state.pathList.splice(index, 1)
+			state.pathList.unshift(path)
 		}
 	}
 }

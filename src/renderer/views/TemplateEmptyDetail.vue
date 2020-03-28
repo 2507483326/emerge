@@ -59,9 +59,12 @@
 						const artGroup = JSON.parse(content.toString())
 						const templateFolder = new TemplateFolder(artGroup)
 						await this.$store.dispatch('addTemplateFolder', templateFolder)
+						console.log(artGroup.list)
 						if (artGroup.list) {
 							artGroup.list.forEach(item => {
 								let template = new Template(item)
+								template.folderId = templateFolder.id
+								console.log(template)
 								this.$store.dispatch('addTemplate', template)
 							})
 						}
