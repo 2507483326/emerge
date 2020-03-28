@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfontnew" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfontnew"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="-daoru" unicode="&#59435;" d="M810.7 426.7v-341.4H213.3V682.7h341.4V768H128v-768h768V426.7zM554.7 640h-85.4v-298.7H768v85.4H615l268.5 268.5-60.3 60.3L554.7 487z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

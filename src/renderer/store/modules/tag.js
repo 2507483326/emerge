@@ -1,3 +1,4 @@
+import { DEFAULT_TAG_LIST } from '@/util/DefaultTagUtil'
 const state = {
 	customTagList: []
 }
@@ -19,14 +20,22 @@ const mutations = {
 const actions = {
 	addNewCustomTag ({state, commit }, tag) {
 		return new Promise((resolve, reject) => {
-			const index = state.customTagList.findIndex(item => {
-				return item.name === tag.name || item.key === tag.key || tag.name === '主键' || tag.name === '不为空' || tag.name === '数值' || tag.name === '文本' || tag.name === '日期'
+			let index = state.customTagList.findIndex(item => {
+				return item.name === tag.name || item.key === tag.key
 			})
-			if (index < 0) {
-				commit('ADD_NEW_CUSTOM_TAG', tag)
-				resolve()
+			if (index >= 0) {
+				reject(new Error('重复的自定义标签!'))
+				return
 			}
-			reject(new Error('重复的自定义标签!'))
+			index = DEFAULT_TAG_LIST.findIndex(item => {
+				return item.name === tag.name || item.key === tag.key
+			})
+			if (index >= 0) {
+				reject(new Error('自定义标签和默认的标签冲突!'))
+				return
+			}
+			commit('ADD_NEW_CUSTOM_TAG', tag)
+			resolve()
 		})
 	},
 	removeCustomTag ({ commit}, tagId) {

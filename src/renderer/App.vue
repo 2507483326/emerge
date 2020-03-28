@@ -18,7 +18,8 @@
 </script>
 
 <style lang="stylus">
-	@import "assets/font/iconfont.css"
+	@import "assets/font/old/iconfont.css"
+	@import "assets/font/new/iconfont.css"
 	*
 		box-sizing border-box
 	#app

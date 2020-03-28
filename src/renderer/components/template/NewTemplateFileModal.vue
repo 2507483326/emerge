@@ -77,9 +77,11 @@
 					await this.$store.dispatch('addTemplate', template)
 					this.$Message.success('添加模板文件成功!')
 					this.isShow = false
-				} catch (e) {
+				} catch (err) {
 					console.error(err)
-					this.$Message.error(err.message)
+					this.$Message.error(err)
+				} finally {
+					this.isShow = false
 				}
 			}
 		}

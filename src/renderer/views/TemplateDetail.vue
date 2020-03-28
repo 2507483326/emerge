@@ -5,15 +5,6 @@
 				<FormItem label="输出路径">
 					<Input prop="outPath" v-model="templateObj.outPath" placeholder="请输入输出路径"></Input>
 				</FormItem>
-				<FormItem prop="language" label="语言">
-					<Select v-model="templateObj.language" style="width:200px">
-						<Option value="html">html</Option>
-						<Option value="css">css</Option>
-						<Option value="javascript">javascript</Option>
-						<Option value="java">java</Option>
-						<Option value="json">json</Option>
-					</Select>
-				</FormItem>
 			</Form>
 		</div>
 		<div class="editor_box">
@@ -31,7 +22,8 @@
 		data () {
 			return {
 				templateObj: null,
-				monacoEditor: null
+				monacoEditor: null,
+				timeout: null
 			}
 		},
 		watch: {
@@ -83,20 +75,23 @@
 				if (this.monacoEditor) {
 					this.monacoEditor.dispose()
 				}
-				console.log(this.templateObj)
 				this.$nextTick(() => {
 					if (this.templateObj && this.$refs.editor) {
 						this.monacoEditor = monaco.editor.create(this.$refs.editor, {
 							value: this.templateObj.content,
-							language: 'javascript'
+							language: 'art'
 						})
 						this.monacoEditor.onDidChangeModelContent(this.changeContent)
 					}
 				})
 			},
 			changeContent () {
-				console.log('change')
-				this.templateObj.content = this.monacoEditor.getValue()
+				if (this.timeout) {
+					clearTimeout(this.timeout)
+				}
+				this.timeout = setTimeout(() => {
+					this.templateObj.content = this.monacoEditor.getValue()
+				}, 500)
 			}
 		}
 	}
@@ -108,6 +103,9 @@
 		display flex
 		flex-direction column
 		width calc(100% - 1px)
+		.header
+			>>> .ivu-form-item
+				width 100%
 		.editor_box
 			flex 1
 			.content-box

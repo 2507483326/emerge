@@ -29,6 +29,8 @@ const mutations = {
 	ADD_DB_TABLE_LIST (state, tableListModel) {
 		window.globbalVue.$set(state.dbTableMap, tableListModel.dbId, [])
 		state.dbTableMap[tableListModel.dbId].push(...tableListModel.tableList)
+		console.log(state.dbTableMap)
+		console.log(state.tableExtendTagList)
 	},
 	ADD_TABLE_CUSTOM_TAG (state, customTagObj) {
 		state.tableExtendTagList.push(customTagObj)
@@ -54,7 +56,7 @@ const actions = {
 				commit('ADD_DB', db)
 				resolve()
 			}
-			reject(new Error('重复的数据库连接名称!'))
+			reject(new Error('数据库连接已存在!'))
 		})
 	},
 	addDbTableList ({ state, commit }, dbTableModel) {

@@ -21,9 +21,17 @@
 				</Button>
 			</div>
 		</div>
-		<Button class="add_new_tag_button" type="primary" @click="addCustomTag">
-			<Icon type="md-add" />
-		</Button>
+
+		<Dropdown style="margin-right: 20px" @on-click="selectMenu">
+			<Button class="add_new_tag_button" type="primary">
+				<Icon type="ios-keypad"></Icon>
+			</Button>
+			<Dropdown-menu slot="list">
+				<Dropdown-item name="add">创建标签</Dropdown-item>
+				<Dropdown-item name="export">导出标签</Dropdown-item>
+				<Dropdown-item name="import">导入标签</Dropdown-item>
+			</Dropdown-menu>
+		</Dropdown>
 		<new-custom-tag-modal ref="newCustomTagModal"></new-custom-tag-modal>
 	</div>
 </template>
@@ -31,6 +39,9 @@
 <script>
 	import { mapState } from 'vuex'
 	import NewCustomTagModal from './NewCustomTagModal'
+	import fs from "fs-extra"
+	const { dialog } = require('electron').remote
+	import path from 'path'
 	export default {
 		data () {
 			return {
@@ -91,6 +102,63 @@
 			dragCustomTag (event, tag) {
 				console.log(tag)
 				event.dataTransfer.setData("customTag", JSON.stringify(tag));
+			},
+			selectMenu (key) {
+				if (key === 'add') {
+					this.addCustomTag()
+					return
+				}
+				if (key === 'export') {
+					this.exportTag()
+					return
+				}
+				if (key === 'import') {
+					this.importTag()
+					return
+				}
+			},
+			exportTag () {
+				this.isContextMenuShow = false
+				dialog.showSaveDialog({
+					title: '选择标签导出',
+					defaultPath: path.normalize('./default.et'),
+					filters: [
+						{ name: 'et', extensions: ['et'] }
+					]
+				}, (filePaths) => {
+					try {
+						if (filePaths) {
+							fs.writeFileSync(path.normalize(filePaths), JSON.stringify(this.customTagList))
+							this.$Message.success('导出标签成功!')
+						}
+					} catch (e) {
+						console.error(e)
+						this.$Message.error('导出标签失败!')
+					}
+				})
+			},
+			importTag () {
+				dialog.showOpenDialog({
+					title: '选择标签导入',
+					properties: ['openFile'],
+					defaultPath: path.normalize('./default.et'),
+					filters: [
+						{ name: 'et', extensions: ['et'] }
+					]
+				}, (filePaths) => {
+					try {
+						if (filePaths) {
+							const tagList = fs.readJsonSync(path.normalize(filePaths[0]))
+							for (let i = 0; i < tagList.length; i++) {
+								this.$store.dispatch('addNewCustomTag', tagList[i])
+							}
+							this.$Message.success('导入标签成功')
+						}
+					} catch (e) {
+						console.error(e)
+						this.$Message.error('导入数据库失败')
+					}
+				})
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 import Column from './Column'
 import uuid from 'uuid'
 export default class Table {
-	constructor (tableName, fields) {
-		this.tableId = uuid.v1()
+	constructor (db, tableName, fields) {
+		this.tableId = db.id + '-' + tableName
 		this.tableName = tableName
 		this.className = this.tableName.replace(/\_(\w)/g, function(all, letter){
 			return letter.toUpperCase();
@@ -13,7 +13,7 @@ export default class Table {
 		for (let fieldName in fields) {
 			let fieldObj = fields[fieldName]
 			fieldObj.name = fieldName
-			this.columns.push(new Column(fieldObj))
+			this.columns.push(new Column(this.tableId, fieldObj))
 		}
 	}
 }

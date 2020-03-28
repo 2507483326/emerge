@@ -7,8 +7,8 @@
 				<Step title="完成"></Step>
 			</Steps>
 		</Card>
-		<select-template ref="selectTemplate" v-show="step === 0" @changeStep="changeStep"></select-template>
-		<select-table ref="selectTable" v-show="step === 1" @generate="generate"></select-table>
+		<select-template ref="selectTemplate" v-show="step === 0" @changeStep="selectTable"></select-template>
+		<select-table ref="selectTable" v-show="step === 1" :loading="loading" @generate="generate" @changeStep="changeStep"></select-table>
 		<generating v-show="step === 2 && diffList.length === 0 && isGenerate"></generating>
 		<generating-success @finish="reset" v-show="step === 2 && diffList.length === 0 && !isGenerate"></generating-success>
 		<file-compare @finish="fileCompareFinish" ref="fileCompare"></file-compare>
@@ -24,6 +24,7 @@
 	import fs from 'fs-extra'
 	import prettydiff from 'prettydiff'
 	import artTemplate from 'art-template'
+	import path from 'path'
 	export default {
 		components: {
 			SelectTemplate,
@@ -34,6 +35,7 @@
 		},
 		data () {
 			return {
+				loading: false,
 				step: 0,
 				diffList: [],
 				isGenerate: false
@@ -61,34 +63,53 @@
 					this.diffList.splice(0, 1)
 				})
 			},
+			selectTable (index) {
+				this.$refs.selectTable.reset()
+				this.step = index
+			},
 			changeStep (index) {
 				this.step = index
 			},
 			generate () {
-				this.isGenerate = true
-				this.step++
-				this.diffList = []
-				let templateList = this.$refs.selectTemplate.$refs.templateTree.getCheckedNodes().filter(item => {
-					return item.folderId != null
-				})
-				let tableList = this.$refs.selectTable.$refs.tableTree.getCheckedNodes().filter(item => {
-					return item.tableName != null
-				})
-				const tableExtendTagList = this.$store.state.db.tableExtendTagList
-				tableList.forEach(tableItem => {
-					tableItem = JSON.parse(JSON.stringify(tableItem))
-					tableItem.columns.forEach(columnItem => {
-						tableExtendTagList.forEach(tableExtendTagItem => {
-							if (tableExtendTagItem.columnId === columnItem.columnId) {
-								columnItem[tableExtendTagItem.key] = true
-							}
+				try {
+					if (this.loading) {
+						return
+					}
+					this.loading = true
+					this.isGenerate = true
+					this.diffList = []
+					let templateList = this.$refs.selectTemplate.$refs.templateTree.getCheckedNodes().filter(item => {
+						return item.folderId != null
+					})
+					let tableList = this.$refs.selectTable.$refs.tableTree.getCheckedNodes().filter(item => {
+						return item.tableName != null
+					})
+					if (tableList == null || tableList.length == 0) {
+						this.$Message.error('请选择要生成的表!')
+						return
+					}
+					const tableExtendTagList = this.$store.state.db.tableExtendTagList
+					tableList.forEach(tableItem => {
+						tableItem = JSON.parse(JSON.stringify(tableItem))
+						tableItem.columns.forEach(columnItem => {
+							tableExtendTagList.forEach(tableExtendTagItem => {
+								if (tableExtendTagItem.columnId === columnItem.columnId) {
+									columnItem[tableExtendTagItem.key] = true
+								}
+							})
+						})
+						templateList.forEach(templateItem => {
+							this.generateTemplate(tableItem, templateItem)
 						})
 					})
-					templateList.forEach(templateItem => {
-						this.generateTemplate(tableItem, templateItem)
-					})
-				})
-				this.isGenerate = false
+					this.isGenerate = false
+					this.step++
+					this.loading = false
+				} catch (e) {
+					this.loading = false
+					console.error(e)
+					this.$Message.error('生成模板失败!')
+				}
 			},
 			generateTemplate (tableItem, templateItem) {
 				const render = artTemplate.compile(templateItem.content)
@@ -96,34 +117,14 @@
 					table: tableItem
 				})
 				const outputFolder = this.$refs.selectTemplate.getOutputPath()
-				const table = tableItem
-				const outputPath = outputFolder + '/' + eval('`' + templateItem.outPath + '`')
-				// 判断文件是否存在
-				fs.ensureFileSync(outputPath)
-				const originContent = fs.readFileSync(outputPath).toString()
-				if (originContent != null && originContent !== '') {
-					prettydiff.options.source = content
-					prettydiff.options.diff = originContent
-					let diffResult = null
-					try {
-						diffResult = prettydiff()
-					} catch (e) {
-						diffResult = ''
-					}
-					// 需要代码合并
-					if (diffResult) {
-						this.diffList.push({
-							outputPath: outputPath,
-							tableItem: tableItem,
-							templateItem: templateItem,
-							content: content,
-							originContent: originContent
-						})
-						return
-					}
+				if (templateItem.outPath == null || templateItem.outPath == '') {
+					this.$Message.error('模板: [' + templateItem.name + '] 输出路径不能为空!')
+					throw new Error('生成模板错误,输出路径不能为空')
+					return
 				}
-				// 生成文件
-				fs.writeFileSync(outputPath, content)
+				const outputPath = outputFolder + '/' + eval('`' + templateItem.outPath + '`')
+				// 生成文件 直接覆盖
+				fs.writeFileSync(path.normalize(outputPath), content)
 			}
 		}
 	}

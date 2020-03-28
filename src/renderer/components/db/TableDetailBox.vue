@@ -21,6 +21,7 @@
 	import CustomTagBox from './CustomTagBox'
 	import TableCustomTag from "@/model/TableCustomTag"
 	import clone from 'clone'
+	import { getTagByKey } from '@/util/DefaultTagUtil'
 	export default {
 		components: {
 			CustomTagBox
@@ -46,30 +47,17 @@
 			getTagList (fieldObj) {
 				const initTagList = []
 				if (fieldObj.isPrimary) {
-					initTagList.push({
-						name: '主键',
-						color: 'primary',
-						closable: false
-					})
+					initTagList.push(getTagByKey('primary'))
 				}
 				if (!fieldObj.isNull) {
-					initTagList.push({
-						name: '不为空',
-						color: 'warning',
-						closable: false
-					})
+					initTagList.push(getTagByKey('notNull'))
 				}
-				initTagList.push({
-					name: this.getTagType(fieldObj.type),
-					color: 'success',
-					closable: false
-				})
+				initTagList.push(getTagByKey(this.getTagType(fieldObj.type)))
 				this.customTagList.forEach(item => {
 					if (item.columnId === fieldObj.columnId) {
 						initTagList.push(item)
 					}
 				})
-				console.log(initTagList)
 				return initTagList
 			},
 			async dropCustomTag (event, field) {
@@ -96,13 +84,13 @@
 			},
 			getTagType (type) {
 				if (type === 'String') {
-					return '文本'
+					return 'string'
 				}
 				if (type === 'Number') {
-					return '数值'
+					return 'number'
 				}
 				if (type === 'Date') {
-					return '日期'
+					return 'date'
 				}
 			},
 			deleteTag (tagId) {

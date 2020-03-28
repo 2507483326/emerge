@@ -5,7 +5,7 @@ export default class Template {
 		name = '',
 		outPath = '',
 		content = '',
-		language = 'html'
+		language = 'art'
 	}) {
 		this.id = uuid.v1()
 		this.folderId = folderId

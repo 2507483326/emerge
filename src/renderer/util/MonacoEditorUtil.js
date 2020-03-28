@@ -1,6 +1,9 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js'
 import store from '../store'
-['javascript'].map(name => {
+import { DEFAULT_TAG_LIST } from '@/util/DefaultTagUtil'
+monaco.languages.register({ id: 'art' })
+let languageList = ['art']
+languageList.map(name => {
 	monaco.languages.registerCompletionItemProvider(name, {
 		provideCompletionItems (model, position) {
 			// 获取当前行数
@@ -10,8 +13,25 @@ import store from '../store'
 			// 获取当前输入行的所有内容
 			const content = model.getLineContent(line)
 			const preStr = content.substring(0, column - 1)
+
+			// each 循环
+			if (/{{(.)*(e|ea|eac|each)$/.test(preStr)) {
+				return {
+					incomplete: true,
+					suggestions: [
+						{
+							label: 'each',
+							kind: monaco.languages.CompletionItemKind.Variable,
+							documentation: '循环',
+							detail: '循环',
+							insertText: 'each $0 }}\n {{ \\$index }} {{ \\$value }} \n{{/each}}',
+							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+						}
+					]
+				}
+			}
 			// 表格对象
-			if (/{{[ ]*(t|ta|tab|tabl|table)$/.test(preStr)) {
+			if (/{{(.)*(t|ta|tab|tabl|table|table)$/.test(preStr)) {
 				return {
 					incomplete: true,
 					suggestions: [
@@ -27,7 +47,7 @@ import store from '../store'
 				}
 			}
 			// 表格字段
-			if (/{{[ ]*table.$/.test(preStr)) {
+			if (/{{(.)*(table\.)$/.test(preStr)) {
 				return {
 					incomplete: true,
 					suggestions: [
@@ -67,7 +87,7 @@ import store from '../store'
 				}
 			}
 			// 数据库表字段对象
-			if (/{{[ ]*(\$|v|va|val|valu|value)$/.test(preStr)) {
+			if (/{{(.)*(\$|\$v|\$va|\$val|\$valu|\$value)$/.test(preStr)) {
 				return {
 					incomplete: true,
 					suggestions: [
@@ -76,20 +96,30 @@ import store from '../store'
 							kind: monaco.languages.CompletionItemKind.Variable,
 							documentation: '数据库表字段对象',
 							detail: '字段对象',
-							insertText: '$value',
+							insertText: 'value',
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.KeepWhitespace
 						}
 					]
 				}
 			}
-			if (/{{[ ]*\$value.$/.test(preStr)) {
+			if (/{{(.)*\$value.$/.test(preStr)) {
 				const customTagSuggestionsList = []
 				store.state.tag.customTagList.forEach(item => {
 					customTagSuggestionsList.push({
-						label: item.key,
+						label: `${item.name}[${item.key}]`,
 						kind: monaco.languages.CompletionItemKind.Field,
 						documentation: item.name + '(自定义字段)',
 						detail: item.name + '(自定义字段)',
+						insertText: item.key,
+						insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+					})
+				})
+				DEFAULT_TAG_LIST.forEach(item => {
+					customTagSuggestionsList.push({
+						label: `${item.name}[${item.key}]`,
+						kind: monaco.languages.CompletionItemKind.Field,
+						documentation: item.name + '(默认字段)',
+						detail: item.name + '(默认字段)',
 						insertText: item.key,
 						insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 					})
@@ -98,7 +128,7 @@ import store from '../store'
 					incomplete: true,
 					suggestions: [
 						{
-							label: 'name',
+							label: '字段名[name]',
 							kind: monaco.languages.CompletionItemKind.Field,
 							documentation: '数据库表字段名',
 							detail: '字段名',
@@ -106,7 +136,7 @@ import store from '../store'
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 						},
 						{
-							label: 'lowCaseName',
+							label: '字段驼峰名称[lowCaseName]',
 							kind: monaco.languages.CompletionItemKind.Field,
 							documentation: '数据库表字段驼峰名',
 							detail: '字段驼峰名称',
@@ -114,7 +144,7 @@ import store from '../store'
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 						},
 						{
-							label: 'remark',
+							label: '字段备注[remark]',
 							kind: monaco.languages.CompletionItemKind.Field,
 							documentation: '数据库表字段备注',
 							detail: '字段备注',
@@ -122,7 +152,7 @@ import store from '../store'
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 						},
 						{
-							label: 'isNull',
+							label: '字段是否为空[isNull]',
 							kind: monaco.languages.CompletionItemKind.Field,
 							documentation: '数据库表字段是否为空',
 							detail: '字段是否为空',
@@ -130,7 +160,7 @@ import store from '../store'
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 						},
 						{
-							label: 'isPrimary',
+							label: '字段是否为主键[isPrimary]',
 							kind: monaco.languages.CompletionItemKind.Field,
 							documentation: '数据库表字段是否为主键',
 							detail: '字段是否为主键',

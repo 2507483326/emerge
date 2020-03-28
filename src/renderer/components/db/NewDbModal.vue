@@ -3,22 +3,22 @@
 		<div class="new_db_box">
 			<Form ref="form" :model="baseModel" :rules="rule" :label-width="0">
 				<FormItem label="" prop="name">
-					<Input v-model="baseModel.name" placeholder="请输入连接名称"></Input>
+					<Input v-model="baseModel.name" placeholder="请输入连接名称" maxlength="15"></Input>
 				</FormItem>
 				<FormItem label="" prop="dataBase">
-					<Input v-model="baseModel.dataBase" placeholder="请输入数据库名称"></Input>
+					<Input v-model="baseModel.dataBase" placeholder="请输入数据库名称" maxlength="50"></Input>
 				</FormItem>
 				<FormItem label="" prop="host">
-					<Input v-model="baseModel.host" placeholder="请输入数据库主机地址"></Input>
+					<Input v-model="baseModel.host" placeholder="请输入数据库主机地址"  maxlength="200"></Input>
 				</FormItem>
 				<FormItem label="" prop="port">
-					<Input v-model="baseModel.port" placeholder="请输入数据库端口号"></Input>
+					<Input v-model="baseModel.port" placeholder="请输入数据库端口号" type="number" maxlength="10"></Input>
 				</FormItem>
 				<FormItem label="" prop="userName">
-					<Input v-model="baseModel.userName" placeholder="请输入数据库连接用户名"></Input>
+					<Input v-model="baseModel.userName" placeholder="请输入数据库连接用户名" maxlength="100"></Input>
 				</FormItem>
 				<FormItem label="" prop="password">
-					<Input v-model="baseModel.password" placeholder="请输入数据库连接密码"></Input>
+					<Input v-model="baseModel.password" type="password" password placeholder="请输入数据库连接密码" maxlength="100"></Input>
 				</FormItem>
 			</Form>
 		</div>
@@ -94,8 +94,8 @@
 					}
 					this.isAddDb = true
 					const mysqlConnectModel = new MysqlConnectModel(this.baseModel)
-					const tableList = await getTableByMysql(mysqlConnectModel)
 					const db = new Db(this.baseModel)
+					const tableList = await getTableByMysql(db, mysqlConnectModel)
 					await this.$store.dispatch('addDb', db)
 					await this.$store.dispatch('addDbTableList', {
 						id: db.id,

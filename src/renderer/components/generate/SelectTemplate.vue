@@ -2,7 +2,9 @@
 	<Card class="content_box">
 		<Form ref="templateForm" :model="templateModel" :labelWidth="0" :rules="templateRule">
 			<FormItem class="file_select_input_box"  prop="outPath">
-				<Input v-model="templateModel.outPath" placeholder="请输入模板输出目录" clearable/>
+				<AutoComplete v-model="templateModel.outPath" placeholder="请输入模板输出目录">
+					<Option v-for="item in pathList" :value="item" :key="item">{{ item }}</Option>
+				</AutoComplete>
 				<Button @click="selectPath">...</Button>
 			</FormItem>
 		</Form>
@@ -22,7 +24,7 @@
 		data () {
 			return {
 				templateModel: {
-					outPath: null
+					outPath: ''
 				},
 				templateRule: {
 					outPath: {
@@ -32,6 +34,11 @@
 				},
 				selectTemplateList: [],
 				templateTree: []
+			}
+		},
+		computed: {
+			pathList () {
+				return this.$store.state.path.pathList
 			}
 		},
 		mounted () {
@@ -65,8 +72,7 @@
 					}).filter(item => {
 						return item.folderId != null
 					})
-					console.log(this.$refs.templateTree.getCheckedNodes())
-					console.log(this.selectTemplateList)
+					this.$store.dispatch('addPath', this.templateModel.outPath)
 					this.$emit('changeStep', 1)
 				})
 			}

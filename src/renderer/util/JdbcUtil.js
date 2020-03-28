@@ -21,10 +21,11 @@ export function testConnect(mysqlConnectModel) {
 
 /**
  * 获取数据库表对象
+ * @param db
  * @param mysqlConnectModel
- * @returns {Promise<any>}
+ * @returns {Promise<unknown>}
  */
-export function getTableByMysql (mysqlConnectModel) {
+export function getTableByMysql (db, mysqlConnectModel) {
 	const connect = new Sequelize(mysqlConnectModel.dataBase, mysqlConnectModel.userName, mysqlConnectModel.password, mysqlConnectModel.options)
 	return new Promise((resolve, reject) => {
 		connect.authenticate().then(() => {
@@ -36,11 +37,11 @@ export function getTableByMysql (mysqlConnectModel) {
 		}).then((tableList) => {
 			const handlerList = []
 			tableList.forEach(tableName => {
-				handlerList.push(getColumnHandler(connect, mysqlConnectModel.dataBase, tableName))
+				handlerList.push(getColumnHandler(db, connect, mysqlConnectModel.dataBase, tableName))
 			})
 			return handlerList
-		}).then(handerList => {
-			Promise.all(handerList).then(tableColumnList => {
+		}).then(handlerList => {
+			Promise.all(handlerList).then(tableColumnList => {
 				resolve(tableColumnList)
 			})
 		}).catch(err => {
@@ -58,14 +59,14 @@ export function getTableByMysql (mysqlConnectModel) {
  * @param tableName
  * @returns {Promise<any>}
  */
-function getColumnHandler (connect, dateBase, tableName) {
+function getColumnHandler (db, connect, dateBase, tableName) {
 	const SHOW_COLUMN_QUERY = "SELECT COLUMN_KEY AS columnKey, COLUMN_COMMENT AS remark, COLUMN_NAME AS columnName, IS_NULLABLE AS isNull, DATA_TYPE AS type FROM `information_schema`.`COLUMNS` WHERE `TABLE_SCHEMA` = '" + dateBase + "' AND `TABLE_NAME` = '" + tableName + "';"
 	return new Promise((resolve, reject) => {
 		connect.query(SHOW_COLUMN_QUERY, {
 			type: connect.QueryTypes.SELECT,
 			raw: true
 		}).then(columnList => {
-			const table = new Table(tableName, columnList)
+			const table = new Table(db, tableName, columnList)
 			resolve(table)
 		}).catch(err => {
 			reject(err)

@@ -11,7 +11,10 @@
 
 <script>
 	import fs from 'fs-extra'
+	import path from 'path'
 	import NewTemplateFileModal from '@/components/template/NewTemplateFileModal'
+	import TemplateFolder from '@/model/TemplateFolder'
+	import Template from '@/model/Template'
 	export default {
 		data () {
 			return {
@@ -38,7 +41,7 @@
 				document.removeEventListener('dragenter', this.dragEnter)
 				document.removeEventListener('dragleave', this.dragLeave)
 			},
-			addExistsFile (event) {
+			async addExistsFile (event) {
 				event.preventDefault()
 				event.stopPropagation()
 				let file = event.dataTransfer.files[0]
@@ -48,10 +51,26 @@
 				}
 				try {
 					const content = fs.readFileSync(file.path)
+					if (path.extname(file.path) === '.art') {
+						this.$refs.newTemplateFileModal.show(null, JSON.parse(content.toString()).content)
+						return
+					}
+					if (path.extname(file.path) === '.artGroup') {
+						const artGroup = JSON.parse(content.toString())
+						const templateFolder = new TemplateFolder(artGroup)
+						await this.$store.dispatch('addTemplateFolder', templateFolder)
+						if (artGroup.list) {
+							artGroup.list.forEach(item => {
+								let template = new Template(item)
+								this.$store.dispatch('addTemplate', template)
+							})
+						}
+						this.$Message.success('导入文件成功!')
+						return
+					}
 					this.$refs.newTemplateFileModal.show(null, content.toString())
 				} catch (e) {
-					console.error(e)
-					this.$Message.error('上传文件失败!')
+					this.$Message.error(e)
 				}
 			},
 			dragEnter (event) {

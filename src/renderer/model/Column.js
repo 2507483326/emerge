@@ -1,13 +1,13 @@
 import uuid from 'uuid'
 export default class Column {
-	constructor({
+	constructor(tableId, {
 		columnName = '',
 		columnKey = '',
 		remark = '',
 		isNull = '',
 		type = ''
 	}) {
-		this.columnId = uuid.v1()
+		this.columnId = tableId + '-' + columnName
 		this.name = columnName
 		this.lowCaseName = this.name.replace(/\_(\w)/g, function(all, letter){
 			return letter.toUpperCase();

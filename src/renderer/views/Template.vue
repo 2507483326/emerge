@@ -3,7 +3,7 @@
 		<left-menu @addTemplateFile="addTemplateFile"></left-menu>
 		<div class="main_box">
 			<div class="tab_panel_box">
-				<tags-nav></tags-nav>
+				<tags-nav ref="tagsNav"></tags-nav>
 			</div>
 			<div class="main_wrapper">
 				<router-view></router-view>

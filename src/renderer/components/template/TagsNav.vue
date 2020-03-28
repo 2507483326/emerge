@@ -21,6 +21,15 @@
 			<div ref="scrollBody" class="tag_scroll_inner" :style="{left: tagBodyLeft + 'px'}">
 				<transition-group name="taglist-moving-animation">
 					<Tag
+						key="-1"
+						type="dot"
+						ref="tagsPageOpened"
+						name="主页"
+						@click.native="handleClick(null)"
+						:color="isCurrentTag(null) ? 'primary' : 'default'"
+						@contextmenu.prevent.native="showContextMenu(null, $event)"
+					>主页</Tag>
+					<Tag
 						type="dot"
 						v-for="(item, index) in tagList"
 						ref="tagsPageOpened"
@@ -62,6 +71,18 @@
 			},
 			templateList () {
 				return clone(this.$store.state.template.templateList)
+			},
+			menuList () {
+				if (this.selectTagNav == null) {
+					return {
+						others: '关闭其他'
+					}
+				} else {
+					return {
+						others: '关闭其他',
+						all: '关闭所有'
+					}
+				}
 			}
 		},
 		data() {
@@ -72,10 +93,6 @@
 				contextMenuLeft: 0,
 				contextMenuTop: 0,
 				menuShow: false,
-				menuList: {
-					others: '关闭其他',
-					all: '关闭所有'
-				},
 				tagList: [],
 				activeTag: null,
 				selectTagNav: null
@@ -107,6 +124,9 @@
 			 * @returns {*|boolean|*}
 			 */
 			isCurrentTag(item) {
+				if (item == null) {
+					return this.activeTag == null || this.tagList == null || this.tagList.length === 0
+				}
 				return this.activeTag === item.key
 			},
 			/**
@@ -189,6 +209,13 @@
 			 * @param item
 			 */
 			handleClick(item) {
+				if (item == null) {
+					this.activeTag = null
+					this.$router.push({
+						path: '/template'
+					})
+					return
+				}
 				console.log(item)
 				const name = item.key
 				const folderId = name.split('|')[0]
