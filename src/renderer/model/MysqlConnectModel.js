@@ -3,6 +3,7 @@ export default class MysqlConnectModel {
 		dataBase = null,
 		userName = null,
 		password = null,
+		options = null,
 		host = null,
 		port = null,
 		dialect = 'mysql',
@@ -11,10 +12,14 @@ export default class MysqlConnectModel {
 		this.dataBase = dataBase
 		this.userName = userName
 		this.password = password
-		this.options = {}
-		this.options.host = host
-		this.options.port = port
-		this.options.dialect = dialect
-		this.options.directory = directory
+		if (options == null || options === '') {
+			this.options = {}
+			this.options.host = host
+			this.options.port = port
+			this.options.dialect = dialect
+			this.options.directory = directory
+		} else {
+			this.options = options
+		}
 	}
 }

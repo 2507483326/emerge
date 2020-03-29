@@ -3,6 +3,7 @@ import path from "path";
 	<div class="db_box">
 		<left-menu @selectTable="selectTable"></left-menu>
 		<div class="main_box">
+			<custom-tag-box v-if="!dbTable"></custom-tag-box>
 			<table-detail-box v-if="dbTable" :table="dbTable" :dbId="dbId"></table-detail-box>
 		</div>
 		<new-db-modal ref="newDbModal"></new-db-modal>
@@ -24,6 +25,7 @@ import path from "path";
 <script>
 	import { getTableByMysql } from '@/util/JdbcUtil'
 	import Db from '@/model/Db'
+	import CustomTagBox from '@/components/db/CustomTagBox'
 	import MysqlConnectModel from '@/model/MysqlConnectModel'
 	import LeftMenu from '@/components/db/LeftMenu'
 	import NewDbModal from '@/components/db/NewDbModal'
@@ -35,7 +37,8 @@ import path from "path";
 		components: {
 			LeftMenu,
 			NewDbModal,
-			TableDetailBox
+			TableDetailBox,
+			CustomTagBox
 		},
 		data () {
 			return {
@@ -52,11 +55,11 @@ import path from "path";
 				const index = this.$store.state.db.dbTableMap[tableModel.dbId].findIndex(item => {
 					return item.tableName === tableModel.tableName
 				})
-				if (index >= 0) {
-					this.dbTable = this.$store.state.db.dbTableMap[tableModel.dbId][index]
-					this.dbId = tableModel.dbId
-					console.log(this.dbTable)
+				if (index < 0) {
+					return
 				}
+				this.dbTable = this.$store.state.db.dbTableMap[tableModel.dbId][index]
+				this.dbId = tableModel.dbId
 			},
 			importDb () {
 				dialog.showOpenDialog({
@@ -83,6 +86,8 @@ import path from "path";
 				try {
 					const mysqlConnectModel = new MysqlConnectModel(model)
 					const db = new Db(model)
+					console.log(db)
+					console.log(mysqlConnectModel)
 					const tableList = await getTableByMysql(db, mysqlConnectModel)
 					await this.$store.dispatch('addDb', db)
 					await this.$store.dispatch('addDbTableList', {
