@@ -113,7 +113,7 @@
 			},
 			generateTemplate (tableItem, templateItem) {
 				const render = artTemplate.compile(templateItem.content)
-				const table = tableItem
+				let table = tableItem
 				let content = render({
 					table: tableItem
 				})
@@ -123,7 +123,13 @@
 					throw new Error('生成模板错误,输出路径不能为空')
 					return
 				}
-				const outputPath = outputFolder + '/' + eval('`' + templateItem.outPath + '`')
+				console.log(templateItem.outPath)
+				console.log('`' + templateItem.outPath + '`')
+				console.log(table)
+				console.log(`${table.lowerCaseTableName}`)
+				const nameFunc = new Function('table', 'return ' + '`' + templateItem.outPath + '`')
+				const outputPath = outputFolder + '/' + nameFunc(table)
+				console.log(outputPath)
 				fs.ensureFileSync(path.normalize(outputPath))
 				// 生成文件 直接覆盖
 				content = this.format(outputPath, content)

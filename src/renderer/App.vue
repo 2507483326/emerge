@@ -11,8 +11,40 @@
 	import BaseHeader from '@/components/layout/BaseHeader'
 	export default {
 		name: 'emerge',
+		data () {
+			return {
+				isConsoleShow: false
+			}
+		},
 		components: {
 			BaseHeader
+		},
+		mounted() {
+			// this.hideConsole()
+			document.addEventListener('keydown', this.keyDownEvent)
+		},
+		methods: {
+			showConsole () {
+				let consoleButton = document.getElementById('__vconsole')
+				console.log(consoleButton)
+				consoleButton.style.display = 'block'
+				this.isConsoleShow = true
+			},
+			hideConsole () {
+				let consoleButton = document.getElementById('__vconsole')
+				console.log(consoleButton)
+				consoleButton.style.display = 'none'
+				this.isConsoleShow = false
+			},
+			keyDownEvent (e) {
+				let currKey = 0
+				e = e || event || window.event
+				currKey = e.keyCode || e.which || e.charCode
+				if (currKey === 81 && (e.ctrlKey || e.metaKey)) {
+					(this.isConsoleShow ? this.hideConsole() : this.showConsole())
+					return false
+				}
+			}
 		}
 	}
 </script>
@@ -22,6 +54,8 @@
 	@import "assets/font/new/iconfont.css"
 	*
 		box-sizing border-box
+	#__vconsole
+		display none
 	#app
 		display flex
 		height 100vh
