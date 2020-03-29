@@ -17,11 +17,11 @@
 				</router-link>
 			</Tooltip>
 			<div class="bottom_box">
-				<!--<Tooltip content="设置" placement="right">
-					<router-link tag="div" to="/generate" class="connect_box list_box">
+				<Tooltip content="设置" placement="right">
+					<router-link tag="div" to="/setting" class="connect_box list_box">
 						<span class="iconfont icon-shezhitools"></span>
 					</router-link>
-				</Tooltip>-->
+				</Tooltip>
 				<Tooltip content="退出" placement="right">
 					<div class="list_box quit_button" @click="quit">
 						<span class="iconfont icon-084tuichu"></span>

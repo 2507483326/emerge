@@ -5,6 +5,7 @@ import Template from '@/views/Template'
 import TemplateDetail from '@/views/TemplateDetail'
 import TemplateEmptyDetail from '@/views/TemplateEmptyDetail'
 import Generate from '@/views/Generate'
+import Setting from '@/views/Setting'
 Vue.use(VueRouter)
 
 const routes = [
@@ -34,6 +35,11 @@ const routes = [
 		path: '/generate',
 		name: 'generate',
 		component: Generate
+	},
+	{
+		path: '/setting',
+		name: 'setting',
+		component: Setting
 	},
 	{
 		path: '*',
