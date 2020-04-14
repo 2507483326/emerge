@@ -57,10 +57,8 @@
 ![默认模板](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/default-template.jpg)
 
 ```
-
+上面为常用变量使用方式展示
 ```
-
-
 
 ## 项目主要功能说明
 
