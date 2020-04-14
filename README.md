@@ -1,11 +1,6 @@
 # emerge
 
-<img src="https://img.shields.io/badge/version-1.0-yellow" alt="https://img.shields.io/badge/version-1.0-yellow"  />
-<img src="https://img.shields.io/badge/vue-2.6.10-brightgreen" />
-<img src="https://img.shields.io/badge/electron-2.0.4-blue" /> 
-<img src="https://img.shields.io/badge/monacoEditor-0.18.1-red" /> 
-<img src="https://img.shields.io/badge/prettydiff-101.2.6-orange" /> 
-<img src="https://img.shields.io/badge/artTemplate-4.13.2-inactive" /> 
+<img src="https://img.shields.io/badge/version-1.0-yellow" alt="https://img.shields.io/badge/version-1.0-yellow"  /><img src="https://img.shields.io/badge/vue-2.6.10-brightgreen" /><img src="https://img.shields.io/badge/electron-2.0.4-blue" /> <img src="https://img.shields.io/badge/monacoEditor-0.18.1-red" /> <img src="https://img.shields.io/badge/prettydiff-101.2.6-orange" /> <img src="https://img.shields.io/badge/artTemplate-4.13.2-inactive" /> 
 
 # 可视化代码生成器
 
