@@ -132,29 +132,35 @@
 				console.log(outputPath)
 				fs.ensureFileSync(path.normalize(outputPath))
 				// 生成文件 直接覆盖
+				console.log(content)
 				content = this.format(outputPath, content)
 				fs.writeFileSync(path.normalize(outputPath), content)
 			},
 			format (outputPath, content) {
-				let config = {
-					"printWidth": 9999999,
-					"singleQuote": true,
-					"semi": false
+				try {
+					let config = {
+						"printWidth": 9999999,
+						"singleQuote": true,
+						"semi": false
+					}
+					// 如果用户选择自定义prettier配置
+					if (this.$store.state.common.enablePrettierPath) {
+						let userConfig = fs.readFileSync(path.normalize(this.$store.state.common.prettierPath))
+						config = JSON.parse(userConfig.toString())
+					}
+					if (path.extname(outputPath) === '.js') {
+						config.parser = 'babel'
+						return prettier.format(content, config)
+					}
+					if (path.extname(outputPath) === '.vue') {
+						config.parser = 'vue'
+						return prettier.format(content, config)
+					}
+					return content
+				} catch (err) {
+					console.log('格式化失败', err)
+					return content
 				}
-				// 如果用户选择自定义prettier配置
-				if (this.$store.state.common.enablePrettierPath) {
-					let userConfig = fs.readFileSync(path.normalize(this.$store.state.common.prettierPath))
-					config = JSON.parse(userConfig.toString())
-				}
-				if (path.extname(outputPath) === '.js') {
-					config.parser = 'babel'
-					return prettier.format(content, config)
-				}
-				if (path.extname(outputPath) === '.vue') {
-					config.parser = 'vue'
-					return prettier.format(content, config)
-				}
-				return content
 			}
 		}
 	}
