@@ -22,11 +22,20 @@
 			}
 		},
 		mounted () {
-			this.tableTree = JSON.parse(JSON.stringify(this.$store.getters.tableTree))
+			this.tableTree = this.getTableTree()
 		},
 		methods: {
 			reset () {
-				this.tableTree = JSON.parse(JSON.stringify(this.$store.getters.tableTree))
+				this.tableTree = this.getTableTree()
+			},
+			getTableTree () {
+				const tree = JSON.parse(JSON.stringify(this.$store.getters.tableTree))
+				for (let item of tree) {
+					item.children = item.children.sort((a, b) => {
+						return a.lowerCaseTableName.localeCompare(b.lowerCaseTableName)
+					})
+				}
+				return tree
 			},
 			back () {
 				this.$emit('changeStep', 0)
