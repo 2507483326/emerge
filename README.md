@@ -7,7 +7,7 @@
 ## 数据库和标签
 通过新增数据库连接，和拖动标签实现对数据库表相关字段的自定义
 
-![数据库](/static/img/sql.jpg)
+![数据库](static/img/sql.jpg)
 
 ![标签](https://raw.githubusercontent.com/2507483326/emerge/master/static/img/tag.jpg)
 
