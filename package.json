@@ -60,7 +60,7 @@
     "mysql2": "^1.7.0",
     "prettier": "^1.19.1",
     "prettydiff": "^101.2.6",
-    "sequelize": "^5.21.1",
+    "sequelize": "^6.29.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "uuid": "^3.3.3",
